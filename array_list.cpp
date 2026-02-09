@@ -50,7 +50,7 @@ void ArrayList::Append(int x){
 
 void ArrayList::Insert(int index, int x){
     //accoutn for index out of range.
-    
+    //if(index)
     
 
 }
