@@ -8,6 +8,7 @@ public:
     //copy constructor
     void Display();
     int Size(); // size of List
+    int Capacity();
     void Append(int x); // add to end of list
     void Insert(int index, int x); // add x at index 
     void Delete(int index); // delete element at index
