@@ -14,7 +14,6 @@ public:
     void Delete(int index); // delete element at index
     int Search(int x); // search for element x and return the index.
     int Get(int index); // return element at index
-    void Set(int index, int x);
 private:
     int* arr;
     int capacity;
