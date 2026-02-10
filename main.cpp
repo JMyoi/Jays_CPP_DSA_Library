@@ -11,15 +11,12 @@ int main() {
    for(int i = 0; i<10; i++){
     L1.Append(i);
    }
-   L1.Insert(3, 67);
-   L1.Insert(0, 67);
-   L1.Insert(15, 67); // should be out of range.
-   L1.Insert(12, 67); //inserting at end 
-   cout<<"size: "<<L1.Size()<<" Capacity: "<<L1.Capacity()<<endl;
-   
+   L1.Delete(10);
+   L1.Delete(9);
+   L1.Delete(0);
+
    L1.Display();
-
-
+   cout<<"size: "<<L1.Size()<<" Capacity: "<<L1.Capacity()<<endl;
 
 
     return 0;

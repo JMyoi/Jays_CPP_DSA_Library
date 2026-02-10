@@ -19,6 +19,7 @@ int ArrayList::Get(int index){
     }
     else{
         cout<<"Cannot get out of range\n";
+        // 
     }
 }
 
@@ -66,7 +67,7 @@ void ArrayList::Insert(int index, int x){
         cout<<"Array has hit it's capacity, not enough space to insert\n";
         return;
     }
-    if(index<=size){
+    if(index>0 && index<=size){
        // shift items to the right to make space at index.
         for(int i = size; i>index; i--){
             arr[i] = arr[i-1]; 
@@ -82,7 +83,7 @@ void ArrayList::Insert(int index, int x){
 
 void ArrayList::Delete(int index){
     //can only delete valid index, if size is 5, deleting at 5 is not valid because array are index 0, so element 5 is at index 4
-    if(index<size){
+    if(index>=0 && index<size){
         for(int i = index; i<size-1; i++){
             arr[i] = arr[i+1];
         }
@@ -91,6 +92,14 @@ void ArrayList::Delete(int index){
     else{
         cout<<"Cannot delete, invalid index\n";
     }
+}
 
+int ArrayList::LinearSearch(int x){
+    for(int i  = 0; i<size; i++){
+        if(arr[i] == x){
+            return i;
+        }
+    }
+    return -1;
 }
 
