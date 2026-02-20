@@ -1,22 +1,19 @@
 #include <iostream>
 #include <vector>
+#include "linked_list.h"
 #include "array_list.h"
 using namespace std; 
 
 
 
 int main() {
-   ArrayList L1;
-   //populate array
-   for(int i = 0; i<10; i++){
-    L1.Append(i);
-   }
-   L1.Delete(10);
-   L1.Delete(9);
-   L1.Delete(0);
-
-   L1.Display();
-   cout<<"size: "<<L1.Size()<<" Capacity: "<<L1.Capacity()<<endl;
+    LinkedList list;
+    list.insert(1);
+    list.insert(2);
+    list.insert(3);
+    list.insert(4);
+    list.insert(5);
+    list.print();
 
 
     return 0;
