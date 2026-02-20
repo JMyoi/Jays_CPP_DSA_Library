@@ -28,3 +28,26 @@ void LinkedList::print(){
     }
     cout<<endl;
 }
+
+void LinkedList::printRec(){
+    recursivePrint(head);
+    cout<<endl;
+}
+
+//helper funcitons
+
+void LinkedList::recursivePrint(Node* p){
+    if(p!=nullptr){
+        cout<<p->data<<" ";
+        recursivePrint(p->next);
+    }
+
+}
+
+int LinkedList::recursiveCount(Node*p){
+    if(p == nullptr)
+        return 0;
+    else    
+        return recursiveCount(p->next)+1;
+
+}

@@ -14,6 +14,7 @@ int main() {
     list.insert(4);
     list.insert(5);
     list.print();
+    list.printR();
 
 
     return 0;
