@@ -8,13 +8,13 @@ using namespace std;
 
 int main() {
     LinkedList list;
-    list.insert(1);
-    list.insert(2);
-    list.insert(3);
-    list.insert(4);
-    list.insert(5);
+    list.insertFront(1);
+    list.insertFront(2);
+    list.insertFront(3);
+    list.insertFront(4);
+    list.insertFront(5);
     list.print();
-    list.printR();
+    list.printRec();
 
 
     return 0;

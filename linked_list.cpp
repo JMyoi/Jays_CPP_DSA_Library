@@ -18,11 +18,13 @@ void LinkedList::insertFront(int data){
         newNode->next = head; 
         head = newNode;
     }
+    length++;
 }
 
+/*TODO: account for inserting at one past the last node, length = 5, insert at 6.*/
 void LinkedList::insertAt(int index, int data){
     // out of range
-    if (index>length){
+    if (index<0 || index>length){
         cout<<"trying to insert out of range\n";
         return;
     }
@@ -43,8 +45,65 @@ void LinkedList::insertAt(int index, int data){
     }
     temp->next = p->next;
     p->next = temp;
+    length++;
     
 }
+
+int LinkedList::deleteAt(int index){
+    if(index<0 || index>length){
+        cout<<"Trying to delete out of range\n";
+        return -1; // excepiton handle
+    }
+
+    //first element
+    if(index == 0){
+        int ret = head->data;
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return ret;
+        length--;
+    }
+    // delete at index not 0
+    Node* temp = head;
+    Node* prev;
+    for(int i = 0; i<index; i++){
+        prev = temp;
+        temp = temp->next;
+    }
+    int ret = temp->data;
+    prev->next = temp->next;
+    delete temp;
+    length--;
+    return ret;
+}
+
+int LinkedList::at(int index){
+    if(index<0 || index>length){
+        cout<<"out of range access\n";
+        return -1;
+    }
+
+    Node* temp = head;
+    for(int i = 0; i<index; i++){
+        temp = temp->next;
+    }
+    return temp->data;
+}
+
+int LinkedList::find(int key){
+    Node* temp = head;
+    int index = 0;
+
+    while(temp!= nullptr){
+        if(temp->data == key)
+            return index;
+        temp = temp->next;
+        index++;
+    }
+    return -1;
+}
+
 
 void LinkedList::print(){
     Node* temp = head;

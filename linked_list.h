@@ -12,10 +12,11 @@ class LinkedList{
         //~LinkedList();
         void insertFront(int data);
         void insertAt(int index, int data);
-        //void at(int index);
-        //void delete(int data);
-        //int search(int data);
-        //int length();
+        int deleteAt(int index); // delete the node and return the value held in it.
+        int at(int index);
+        int find(int key); // searches for linked list if key is found then return index of that key, else -1.
+        //int length();   
+        //insertBack(int data);
         void print();
         void printRec();
         
