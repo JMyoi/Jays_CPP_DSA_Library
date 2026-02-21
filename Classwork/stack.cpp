@@ -12,7 +12,7 @@ public:
    Stack<T>& operator = (const Stack<T>& s); //overloading assignment     
    bool Push (const T& element);  // Push element onto stack
    bool Pop (T& element);  // Pop element off stack
-   private:
+private:
    int size; // size of stack
    int top;  // location of the top element
    T *stackPtr; // pointer to stack 

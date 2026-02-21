@@ -10,7 +10,9 @@ class LinkedList{
     public:
         LinkedList();
         //~LinkedList();
-        void insert(int data);
+        void insertFront(int data);
+        void insertAt(int index, int data);
+        //void at(int index);
         //void delete(int data);
         //int search(int data);
         //int length();

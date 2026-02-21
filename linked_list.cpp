@@ -8,7 +8,7 @@ LinkedList::LinkedList(){
     length = 0;
 }
 
-void LinkedList::insert(int data){
+void LinkedList::insertFront(int data){
     Node* newNode = new Node;
     newNode->data = data;
     newNode->next = nullptr;
@@ -18,6 +18,32 @@ void LinkedList::insert(int data){
         newNode->next = head; 
         head = newNode;
     }
+}
+
+void LinkedList::insertAt(int index, int data){
+    // out of range
+    if (index>length){
+        cout<<"trying to insert out of range\n";
+        return;
+    }
+    //create new node
+    Node* temp = new Node;
+    temp->data = data;
+    temp->next = nullptr;
+    // front of the list index = 0
+    if(index == 0){
+        temp->next = head;
+        head = temp;
+        return;
+    }
+    // insert at a given position, not first index.
+    Node* p = head;
+    for(int i = 0; i<index-1; i++){
+        p = p->next;
+    }
+    temp->next = p->next;
+    p->next = temp;
+    
 }
 
 void LinkedList::print(){
