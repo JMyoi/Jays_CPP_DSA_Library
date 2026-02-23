@@ -14,7 +14,15 @@ class Stack{
         int peek();
         bool isEmpty();
         bool isFull();  
+        ~Stack();
+        Stack(const Stack& origStack);
+        Stack& operator=(const Stack& stackToCopy);
         //copy constructor, destructor, copy assignment operator
 
 };
 
+// Test bench function declarations
+void StackText();
+void CopyConstructorTest();
+void CopyAssignmentTest();
+void DestructorTest();
