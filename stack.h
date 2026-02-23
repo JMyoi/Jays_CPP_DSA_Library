@@ -4,11 +4,11 @@
 class Stack{
 
     private:
-        int capacity;
+        int capacity;// starting at index 0, capacity = 20 actually has 21 capacity.
         int top; // keeps track of the index of the top of the stack.
         int* array;
     public:
-        Stack();
+        Stack(int size = 100);
         void push(int data);
         int pop();
         int peek();

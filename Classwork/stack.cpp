@@ -44,6 +44,7 @@ Stack<T>  Stack<T> :: operator + (const Stack<T>& s2) const
    // temp={1,3,4,6,7,8}, where the top is 5 and the top element is 8
      return temp;
 } 
+
 template<class T>
 Stack<T> :: Stack (Stack<T>& s) //copy constructor
 { size=s.size;
