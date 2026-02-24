@@ -8,6 +8,76 @@ LinkedList::LinkedList(){
     length = 0;
 }
 
+LinkedList::~LinkedList(){
+    Node* p = head; //p to track what to delete
+    while(head){
+        head = head->next;
+        delete p;
+        p = head;
+    }
+}
+// copy constructor
+LinkedList::LinkedList(const LinkedList& origList){
+    cout<<"Copy Constructor called. \n";
+    //create a new list by creating each node from the origList
+    length = origList.length;
+    head = nullptr; // in case original list is empty
+
+    if (origList.head!= nullptr){ 
+        Node* p = origList.head; // p is an iterator, keeps track of nodes to copy from original linked list.
+        head = new Node;
+        head->data = p->data;
+        head->next = nullptr;// in case there is only one element in the linked list.
+        Node* curr = head; // keeps track of current new node created;
+        Node* prev = head; // keeps track of the previously created node to link to curr
+        p = p->next;
+
+        while(p!=nullptr){
+            curr = new Node{p->data, nullptr};
+            prev->next = curr;
+            prev = curr;
+            p = p->next;
+        }
+        curr->next = nullptr; // set last element to point to null
+    }
+}
+
+//copy assignment operator
+LinkedList& LinkedList::operator=(const LinkedList& listToCopy){
+    cout<<"Copy assignment called. \n";
+
+    if(this!= &listToCopy){
+        //delete LHS  linked list
+        // can we do delete this;?
+        Node* p = head; //p to track what to delete
+        while(head){
+            head = head->next;
+            delete p;
+            p = head;
+        }
+
+        // create a new linked list copying from RHS
+        length = listToCopy.length;
+        head = nullptr;
+        if(listToCopy.head!= nullptr){
+            Node* p = listToCopy.head;
+            head = new Node{p->data, nullptr};
+            Node* prev = head;
+            Node* curr = head;
+            p = p->next;
+            while(p){
+                curr = new Node{p->data, nullptr};
+                prev->next = curr;
+                prev = curr;
+                p = p->next;
+            }
+            curr->next = nullptr;
+        }
+    }
+    return *this;
+
+}
+
 void LinkedList::insertFront(int data){
     Node* newNode = new Node;
     newNode->data = data;
@@ -36,6 +106,7 @@ void LinkedList::insertAt(int index, int data){
     if(index == 0){
         temp->next = head;
         head = temp;
+        length++;
         return;
     }
     // insert at a given position, not first index.
@@ -50,7 +121,7 @@ void LinkedList::insertAt(int index, int data){
 }
 
 int LinkedList::deleteAt(int index){
-    if(index<0 || index>length){
+    if(index<0 || index>=length){
         cout<<"Trying to delete out of range\n";
         return -1; // excepiton handle
     }
@@ -61,8 +132,8 @@ int LinkedList::deleteAt(int index){
         Node* temp = head;
         head = head->next;
         delete temp;
-        return ret;
         length--;
+        return ret;
     }
     // delete at index not 0
     Node* temp = head;
@@ -79,7 +150,7 @@ int LinkedList::deleteAt(int index){
 }
 
 int LinkedList::at(int index){
-    if(index<0 || index>length){
+    if(index<0 || index>=length){
         cout<<"out of range access\n";
         return -1;
     }
@@ -117,6 +188,10 @@ void LinkedList::print(){
 void LinkedList::printRec(){
     recursivePrint(head);
     cout<<endl;
+}
+
+int LinkedList::getLength(){
+    return length;
 }
 
 //helper funcitons

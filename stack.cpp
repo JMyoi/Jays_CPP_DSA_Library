@@ -8,6 +8,7 @@ Stack::Stack(int size){
     array = new int[size];
 
 }
+
 //destructor
 Stack::~Stack(){
     delete[] array;
@@ -25,10 +26,10 @@ Stack::Stack(const Stack& origStack){
     for(int i = 0; i<top+1; i++){
         array[i] = origStack.array[i];
     }
-
 }
 
-Stack& Stack::operator=(const Stack& stackToCopy){\
+//overloaded assignment operator
+Stack& Stack::operator=(const Stack& stackToCopy){
     cout<<"copy constructor called";
     if(this != &stackToCopy){
         capacity = stackToCopy.capacity;
