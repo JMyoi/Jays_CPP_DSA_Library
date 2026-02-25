@@ -29,6 +29,7 @@ struct Node{
  T data;
  Node<T> *next;
 };
+
 template <class T>
 class Chain {
  public:

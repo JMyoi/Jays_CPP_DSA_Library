@@ -180,13 +180,95 @@ void LinkedListTest(){
     cout << "  find(42): " << L7.find(42) << endl;
     cout << "  deleteAt(0): " << L7.deleteAt(0) << endl;
     cout << endl;
+
+    // Test 13: Rule of Three (Copy Ctor, Copy Assignment, Destructor Safety)
+    cout << "--- Test 13: Rule of Three ---" << endl;
+    LinkedList source;
+    source.insertFront(10);
+    source.insertFront(20);
+    source.insertFront(30);
+    cout << "Source list (30, 20, 10): ";
+    source.print();
+
+    LinkedList copyConstructed(source);
+    cout << "Copy-constructed list: ";
+    copyConstructed.print();
+    cout << "copyConstructed length should be 3: " << copyConstructed.getLength() << endl;
+
+    source.deleteAt(0);
+    source.insertFront(99);
+    cout << "Source after modification (99, 20, 10): ";
+    source.print();
+    cout << "Copy should remain unchanged (30, 20, 10): ";
+    copyConstructed.print();
+    cout << "copyConstructed.at(0) should be 30: " << copyConstructed.at(0) << endl;
+
+    LinkedList assigned;
+    assigned.insertFront(1);
+    assigned.insertFront(2);
+    cout << "Assigned before copy assignment (2, 1): ";
+    assigned.print();
+    assigned = source;
+    cout << "Assigned after assigned = source (99, 20, 10): ";
+    assigned.print();
+
+    assigned.deleteAt(1);
+    assigned.insertFront(77);
+    cout << "Assigned after modification (77, 99, 10): ";
+    assigned.print();
+    cout << "Source should remain unchanged (99, 20, 10): ";
+    source.print();
+
+    assigned = assigned;
+    cout << "After self-assignment, assigned should be unchanged: ";
+    assigned.print();
+    cout << "assigned length should still be 3: " << assigned.getLength() << endl;
+
+    {
+        LinkedList scopedCopy(source);
+        LinkedList scopedAssigned;
+        scopedAssigned = source;
+        cout << "Scoped copies created and will be destroyed at end of block." << endl;
+    }
+    cout << "After scoped destructors, source should still be valid: ";
+    source.print();
+    cout << endl;
     
     cout << "=== ALL TESTS COMPLETE ===" << endl;
 }
 
+
+
+class Time{
+    private:
+        int hours;
+        int minutes;
+    public:
+        Time(int h = 0, int m = 0):hours(h), minutes(m){}
+        void print(){cout<<hours<<" "<<minutes;}
+        // overloaded operators
+        Time operator+(Time rhs);
+        bool operator==(Time rhs);
+} ;
+
+Time Time::operator+(Time rhs){
+    Time timeTotal;
+    timeTotal.hours = hours + rhs.hours;
+    timeTotal.minutes = minutes + rhs.minutes;
+    return timeTotal;
+}
+bool Time::operator==(Time rhs){
+    return (hours == rhs.hours) && (minutes == rhs.minutes);
+}
+
 int main() {
-    //StackText();
-    LinkedListTest();
     
+    Time t1(2, 20);
+    Time t2(2, 20);
+    Time t3 = t1.operator+(t2); // compiler uses the programmer defined overloaded + operator
+    t3.print();
+    cout<<"\nsame: "<< (t1.operator==(t2));
+
+
     return 0;
 }
