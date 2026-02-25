@@ -19,18 +19,21 @@ private:
    bool Isempty (){return (top == -1);}
    bool Isfull () {return (top == size - 1);}
 };
+
 template<class T>
 Stack<T>& Stack<T> :: operator = (const Stack<T>& s) // overloading assignemnt
 { 
    if (&s != this) {
      delete [ ] stackPtr;
      size=s.size;
-     top=s.top;     stackPtr= new T [size];
+     top=s.top;     
+     stackPtr= new T [size];
      for (int i=0; i < size; i++)
          stackPtr[i]=s.stackPtr[i];
     }
     return *this; 
 }
+
 template<class T>
 Stack<T>  Stack<T> :: operator + (const Stack<T>& s2) const
 {
@@ -53,20 +56,15 @@ Stack<T> :: Stack (Stack<T>& s) //copy constructor
   for (int i=0; i < size; i++)
   stackPtr[i]=s.stackPtr[i]; // allocate space for size elements of type T
 } 
-   
-
-
-
-
-
 
 template<class T>
 Stack<T> :: Stack (int n)
 { 
-  size = n > 0 ? n :10;
+  size = n > 0 ? n : 10;
   top = -1; // empty stack
   stackPtr = new T [size]; // allocate space for size elements of type T
 }
+
 template<class T>
 bool  Stack<T>::Push (const T& element)
 {
@@ -77,6 +75,7 @@ bool  Stack<T>::Push (const T& element)
    return (false);     
   
 }
+
 template<class T>
 bool Stack<T>::Pop  (T& element)
 {
@@ -87,8 +86,7 @@ bool Stack<T>::Pop  (T& element)
   return false;
 }
 
-int main()
-{
+int main(){
   int size1, size2, element;
   cout  << endl << "Enter size of stack1: " ;
   cin >> size1;
@@ -107,12 +105,13 @@ int main()
      cin >> element;
   }  while (intS2.Push(element));
 
-  intS3 = intS1 + intS2;
+  intS3 = intS1 + intS2; // calls overloaded + and assignemtn operator.
 
 
   cout << endl << "displaying S3";
   cout << endl << "=============";  
-  while ( intS3.Pop(element))
-       cout << endl << "element: " << element;
-       cout << endl;
+  while ( intS3.Pop(element)){
+     cout << endl << "element: " << element;
+     cout << endl;
+  }
  }

@@ -239,36 +239,35 @@ void LinkedListTest(){
 
 
 
-class Time{
-    private:
-        int hours;
-        int minutes;
+
+
+//custom exeption class
+class NegativeValueException{
     public:
-        Time(int h = 0, int m = 0):hours(h), minutes(m){}
-        void print(){cout<<hours<<" "<<minutes;}
-        // overloaded operators
-        Time operator+(Time rhs);
-        bool operator==(Time rhs);
-} ;
+        NegativeValueException(){}// constructor that does nothing. though it can.
+}; 
 
-Time Time::operator+(Time rhs){
-    Time timeTotal;
-    timeTotal.hours = hours + rhs.hours;
-    timeTotal.minutes = minutes + rhs.minutes;
-    return timeTotal;
-}
-bool Time::operator==(Time rhs){
-    return (hours == rhs.hours) && (minutes == rhs.minutes);
+// Function that throws the custom exception
+void checkValue(int x) {
+    if (x < 0) {
+        throw NegativeValueException();
+    }
+    else {
+        cout << "Value is: " << x << endl;
+    }
 }
 
-int main() {
+int main(){
+    int numbers[] = {10, -5, 20};
     
-    Time t1(2, 20);
-    Time t2(2, 20);
-    Time t3 = t1.operator+(t2); // compiler uses the programmer defined overloaded + operator
-    t3.print();
-    cout<<"\nsame: "<< (t1.operator==(t2));
+    for(int n: numbers){
+        try {
+            checkValue(n);
+        }
+        catch (NegativeValueException e) {
+            cout << "Exception caught, No Negatives allowed\n";
+        }
+    }
+} 
 
 
-    return 0;
-}
