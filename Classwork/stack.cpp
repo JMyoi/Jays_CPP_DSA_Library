@@ -1,4 +1,5 @@
 #include <iostream> //example of operator overloading
+#include <stack>
 using namespace std;
 
 
@@ -35,9 +36,8 @@ Stack<T>& Stack<T> :: operator = (const Stack<T>& s) // overloading assignemnt
 }
 
 template<class T>
-Stack<T>  Stack<T> :: operator + (const Stack<T>& s2) const
-{
-   Stack<T> temp(totsize); // totsize = size of stack1 + size of stack2 
+Stack<T>  Stack<T> :: operator + (const Stack<T>& s2) const{
+   // totsize = size of stack1 + size of stack2 
    // do your work here
    // + operator what is does is to concatenate two stacks
    // s1 and s2
@@ -45,7 +45,18 @@ Stack<T>  Stack<T> :: operator + (const Stack<T>& s2) const
    // top of stack1 = 1 (top element = 3}, top of stack2 = 3 (top element = 8)
    // totsize= 10 (that is size of s1 + size of s2)
    // temp={1,3,4,6,7,8}, where the top is 5 and the top element is 8
-     return temp;
+
+   int totsize = size + s2.size;
+   Stack<T> temp(totsize);
+   //populate new stack with s1 elements
+   for(int i = 0; i<top+1 ;i++){
+      temp.stackPtr[++temp.top] = stackPtr[i];
+   }
+   //populate new stack with s2 elements
+   for(int i = 0; i<s2.top + 1; i++){
+      temp.stackPtr[++temp.top] = s2.stackPtr[i];
+   }
+   return temp;
 } 
 
 template<class T>
@@ -54,7 +65,7 @@ Stack<T> :: Stack (Stack<T>& s) //copy constructor
   stackPtr = new T [size];
   top=s.top;
   for (int i=0; i < size; i++)
-  stackPtr[i]=s.stackPtr[i]; // allocate space for size elements of type T
+   stackPtr[i]=s.stackPtr[i]; // allocate space for size elements of type T
 } 
 
 template<class T>
@@ -94,19 +105,29 @@ int main(){
   cin >> size2;
   Stack< int > intS1 (size1), intS2 (size2), intS3 (1);
   //create stack1
-  do
-  {  cout << endl << "Enter element of stack1: ";
-     cin >> element;
-  }  while (intS1.Push(element));
+
+  //should not be a do while loop because we want to stop when the stack is full, not after it is full.
+  // a for loop is better and does not ask an extra time
+   for(int i = 0; i<size1; i++){
+      cout << endl << "Enter element of stack1: ";
+      cin >> element;
+      if(!intS1.Push(element)){
+         cout << "Stack is full. Cannot push more elements." << endl;
+         break;
+      }
+   }
    
     // create stack2
-  do
-  {  cout << endl << "Enter element of stack2: ";
-     cin >> element;
-  }  while (intS2.Push(element));
+   for(int i = 0; i<size2; i++){
+      cout << endl << "Enter element of stack2: ";
+      cin >> element;
+      if(!intS2.Push(element)){
+         cout << "Stack is full. Cannot push more elements." << endl;
+         break;
+      }
+  }
 
   intS3 = intS1 + intS2; // calls overloaded + and assignemtn operator.
-
 
   cout << endl << "displaying S3";
   cout << endl << "=============";  
