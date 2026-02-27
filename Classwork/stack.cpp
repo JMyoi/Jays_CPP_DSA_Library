@@ -1,3 +1,54 @@
+/* 
+ Output:
+
+Enter size of stack1: 5
+
+Enter size of stack2: 5
+
+Enter element of stack1: 1
+
+Enter element of stack1: 2
+
+Enter element of stack1: 3
+
+Enter element of stack1: 4
+
+Enter element of stack1: 5
+
+Enter element of stack2: 6
+
+Enter element of stack2: 7
+
+Enter element of stack2: 8
+
+Enter element of stack2: 9
+
+Enter element of stack2: 10
+
+displaying S3
+=============
+element: 10
+
+element: 9
+
+element: 8
+
+element: 7
+
+element: 6
+
+element: 5
+
+element: 4
+
+element: 3
+
+element: 2
+
+element: 1
+ 
+ 
+ */
 #include <iostream> //example of operator overloading
 #include <stack>
 using namespace std;
@@ -107,7 +158,7 @@ int main(){
   //create stack1
 
   //should not be a do while loop because we want to stop when the stack is full, not after it is full.
-  // a for loop is better and does not ask an extra time
+  //a for loop is better and does not ask an extra time
    for(int i = 0; i<size1; i++){
       cout << endl << "Enter element of stack1: ";
       cin >> element;
@@ -136,3 +187,4 @@ int main(){
      cout << endl;
   }
  }
+ 

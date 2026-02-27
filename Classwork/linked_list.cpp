@@ -5,6 +5,23 @@
 // B={1,0,7}    length=3
 // A.Extend(B)= {2,6,4,7,1,0,7}  new length of A = 7
 
+/*
+output:
+
+Length= 0
+IsEmpty = 1
+List: 2 3 4 5 
+IsEmpty = 0
+First element is: 2
+The length of the list is: 4
+List: 3 4 5 
+Createing Chain B: 
+
+List: 1 0 7 
+Extending Chain A with Chain B: 
+
+List: 3 4 5 1 0 7 %                     
+*/
 
 
 #include <iostream>
@@ -42,10 +59,46 @@ class Chain {
      Chain<T>& Delete (int k, T& x); // delete k element into x 
      Chain<T>& Insert (int k,const T& x); // insert x at  k element
      void Output () const;
+     void Extend(const Chain<T>& b);
  private:
   Node<T> *first; //pointer to the first node
   int length;
 };
+
+template<class T>
+void Chain<T>::Extend(const Chain<T>& b){
+  //create a new copy of the chain b. 
+  if(b.IsEmpty()){
+    return;
+  }
+  Node<T>* BHead; // the head of the newly created linked list copy of b
+  // Bcurr keeps track of what nodes to copy from b.
+  Node<T>* Bcurr = b.first;
+  Node<T>* curr = nullptr; // keeps track of newly created links current node to link to newly created nodes
+
+  for(int i = 0; i<b.length; i++){
+    Node<T>* NodeCopy = new Node<T>;
+    NodeCopy->data = Bcurr->data;
+    if(i == 0){ // if it's the first node then set BHead to point to that first node.
+      BHead = NodeCopy;
+      curr = BHead;
+    }
+    else{
+      curr->next = NodeCopy;
+      curr = curr->next;
+    }
+    Bcurr = Bcurr->next; // move curr to next node
+  }
+
+  //then link the tail of chain a, to newly created chain.
+  curr = first; // resuse the curr pointer to keep track of Node traversal till end.
+  for(int i = 0; i<length-1; i++){
+    curr = curr->next;
+  }
+  //link a's tail node to the newly created link list, which is a copy of b.
+  curr->next = BHead;
+  length += b.length; // update the length of a.
+}
 
 //destructor
 // complexity O(length)
@@ -173,6 +226,15 @@ int main()
        cout << endl << "The length of the list is: " << L.Length();
        L.Delete(1,z);
        L.Output();
+       cout<<"\nCreateing Chain B: "<<endl;
+       Chain<int> B;
+       B.Insert(1,1).Insert(2,0).Insert(3,7);
+       B.Output();
+      cout<<"\nExtending Chain A with Chain B: "<<endl;
+      L.Extend(B);
+      L.Output();
+
+
   }
   catch(NoMem) {
     cerr << "Not enough memory" << endl;
