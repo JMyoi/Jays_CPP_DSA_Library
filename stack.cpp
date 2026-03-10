@@ -45,7 +45,7 @@ Stack& Stack::operator=(const Stack& stackToCopy){
 
 void Stack::push(int data){
     // if there is still space in the stack to push 
-    if(top+1 < capacity ){
+    if(!isFull()){ //originally top+1 < capacity
         array[++top] = data; // pre incriment will incriment first then assign to the new value.
     }
     else{// allocate new sized array, 20 more.
