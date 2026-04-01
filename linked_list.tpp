@@ -1,6 +1,6 @@
 #pragma once
-
 #include <iostream>
+
 //constructor
 template <typename T>
 LinkedList<T>::LinkedList(){

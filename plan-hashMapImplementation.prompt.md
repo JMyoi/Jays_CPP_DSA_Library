@@ -32,6 +32,11 @@ Design two hash map classes following your library's conventions: Hash_Map_Chain
 ---
 
 ## Hash_Map_OA Structure
+Open Addressing via Linear probe and quadratic probe
+we can toggle what probing method we want in the constructor default argument
+Hash_Map_OA(probing = 0) 
+implement rehashing after a load factor >0.75?, should hash earlier for open addressing
+why? Clustering makes performance degrade faster
 
 ### Data Members:
 1. `_table` — array of key-value pairs (with tombstone marker for deleted entries)
