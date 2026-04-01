@@ -23,3 +23,19 @@ Time Time::operator+(Time rhs) const{
 bool Time::operator==(Time rhs) const {
     return (hours == rhs.hours) && (minutes == rhs.minutes);
 }
+
+//custom exeption class
+class NegativeValueException{
+    public:
+        NegativeValueException(){}// constructor that does nothing. though it can.
+}; 
+
+// Function that throws the custom exception
+void checkValue(int x) {
+    if (x < 0) {
+        throw NegativeValueException();
+    }
+    else {
+        cout << "Value is: " << x << endl;
+    }
+}
