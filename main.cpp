@@ -5,7 +5,8 @@ using namespace std;
 
 
 int main(){
-   LinkedListTest();
+    HashMapChainingTest();
+
     return 0;
 } 
 

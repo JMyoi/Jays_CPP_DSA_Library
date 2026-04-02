@@ -1,5 +1,6 @@
 #include <iostream>
 #include "linked_list.h"
+#include "hash_map_chaining.h"
 using namespace std;
 
 void LinkedListTest(){
@@ -232,4 +233,83 @@ void LinkedListTest(){
     cout << endl;
 
     cout << "=== ALL TESTS COMPLETE ===" << endl;
+}
+
+void HashMapChainingTest(){
+    cout << "=== HASH MAP CHAINING TEST BENCH ===" << endl << endl;
+
+    HashMapChaining<string> table;
+
+    cout << "--- Test 1: Initial State ---" << endl;
+    cout << "Initial load factor should be 0: " << table.getLoadFactor() << endl;
+    cout << endl;
+
+    cout << "--- Test 2: Basic Insertions ---" << endl;
+    cout << "insert(1, one) should be 1: " << table.insert(1, "one") << endl;
+    cout << "insert(2, two) should be 1: " << table.insert(2, "two") << endl;
+    cout << "insert(3, three) should be 1: " << table.insert(3, "three") << endl;
+    cout << "Load factor should be about 3/23 ~= 0.1304: " << table.getLoadFactor() << endl;
+    cout << endl;
+
+    cout << "--- Test 3: Duplicate Key Rejection ---" << endl;
+    cout << "insert(2, TWO) should be 0: " << table.insert(2, "TWO") << endl;
+    cout << "Load factor should be unchanged: " << table.getLoadFactor() << endl;
+    cout << endl;
+
+    cout << "--- Test 4: Collision Handling (Chaining) ---" << endl;
+    // With capacity 23, these map to the same bucket: 1, 24, 47.
+    cout << "insert(24, twenty-four) should be 1: " << table.insert(24, "twenty-four") << endl;
+    cout << "insert(47, forty-seven) should be 1: " << table.insert(47, "forty-seven") << endl;
+    cout << "Table after collision inserts:" << endl;
+    table.print();
+    cout << endl;
+
+    cout << "--- Test 5: Rehash Trigger ---" << endl;
+    int successfulInserts = 0;
+    for (int key = 100; key < 125; key++) {
+        if (table.insert(key, "value_" + to_string(key))) {
+            successfulInserts++;
+        }
+    }
+    cout << "Successful inserts from [100..124]: " << successfulInserts << endl;
+    cout << "Load factor after bulk insert (should stay <= 0.75 if rehash works): "
+         << table.getLoadFactor() << endl;
+
+    cout << endl;
+    cout << "--- Test 6: Get Existing Keys ---" << endl;
+    cout << "get(1) should be one: " << table.get(1) << endl;
+    cout << "get(24) should be twenty-four: " << table.get(24) << endl;
+    cout << "get(124) should be value_124: " << table.get(124) << endl;
+
+    cout << endl;
+    cout << "--- Test 7: Get Missing Key ---" << endl;
+    string missing = table.get(9999);
+    cout << "get(9999) should return empty string default: '" << missing << "'" << endl;
+
+    cout << endl;
+    cout << "--- Test 8: Remove Existing Key ---" << endl;
+    double beforeRemove = table.getLoadFactor();
+    table.remove(24);
+    string removedCheck = table.get(24);
+    double afterRemove = table.getLoadFactor();
+    cout << "After remove(24), get(24) should be empty: '" << removedCheck << "'" << endl;
+    cout << "Load factor should decrease:" << endl;
+    cout << "  before: " << beforeRemove << endl;
+    cout << "  after : " << afterRemove << endl;
+
+    cout << endl;
+    cout << "--- Test 9: Remove Missing Key ---" << endl;
+    double beforeMissingRemove = table.getLoadFactor();
+    table.remove(987654);
+    double afterMissingRemove = table.getLoadFactor();
+    cout << "Load factor should be unchanged after removing missing key:" << endl;
+    cout << "  before: " << beforeMissingRemove << endl;
+    cout << "  after : " << afterMissingRemove << endl;
+
+    cout << endl;
+    cout << "Final table snapshot:" << endl;
+    table.print();
+    cout << endl;
+
+    cout << "=== HASH MAP CHAINING TESTS COMPLETE ===" << endl;
 }
