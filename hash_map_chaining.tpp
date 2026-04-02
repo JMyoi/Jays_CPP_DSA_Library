@@ -17,7 +17,7 @@ bool HashMapChaining<T>::insert(int key, const T& value){
     if(getLoadFactor() > 0.75){
         rehash();
     }
-    //scan to make sure there is no node with this key
+    //scan linked list to make sure there is no node with this key
     int hashIndex = ComputeHash(key);
     for(int i = 0; i<HashTable.at(hashIndex).getLength(); i++){
         if(HashTable.at(hashIndex).at(i).key == key){
@@ -34,21 +34,30 @@ bool HashMapChaining<T>::insert(int key, const T& value){
 
 
 template <typename T>
-T HashMapChaining<T>::get(int key){
+bool HashMapChaining<T>::get(int key, T& out){
     //compute hash value index
     int index = ComputeHash(key);
     if(HashTable.at(index).getLength() == 0){
         cout<<"Key Not found!"<<endl;
-        return T{};
+        return false;
     } 
      //traverse linked list at that hash value index until we found the key
     for(int i = 0; i < HashTable.at(index).getLength(); i++){
-        if(HashTable.at(index).at(i).key == key)
-            return HashTable.at(index).at(i).value;
+        if(HashTable.at(index).at(i).key == key){
+            out =  HashTable.at(index).at(i).value;
+            return true;
+        }
     }
-
     cout<<"Key Not found!"<<endl;
-    return T{};
+    return false;
+}
+
+template <typename T>
+void HashMapChaining<T>::clear(){
+    for(int i = 0; i<capacity; i++){
+        HashTable.at(i).clear();
+    }
+    size = 0;
 }
 
 template <typename T>
@@ -67,7 +76,6 @@ void HashMapChaining<T>::remove(int key){
             return;
         }
     }
-
     cout<<"Key Not found!"<<endl;
 
 }
@@ -93,8 +101,8 @@ void HashMapChaining<T>::print(){
 
 template <typename T>
 int HashMapChaining<T>::ComputeHash(int key){
-    return key % capacity;
-    //return ((key % capacity) + capacity) % capacity;
+    //return key % capacity;
+    return ((key % capacity) + capacity) % capacity;
     //modulo normalization to handle negative keys
 }
 

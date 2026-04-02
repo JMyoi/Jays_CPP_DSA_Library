@@ -239,9 +239,12 @@ void HashMapChainingTest(){
     cout << "=== HASH MAP CHAINING TEST BENCH ===" << endl << endl;
 
     HashMapChaining<string> table;
+    string out;
 
     cout << "--- Test 1: Initial State ---" << endl;
     cout << "Initial load factor should be 0: " << table.getLoadFactor() << endl;
+    cout << "Initial size should be 0: " << table.getSize() << endl;
+    cout << "Initial capacity should be 23: " << table.getCapacity() << endl;
     cout << endl;
 
     cout << "--- Test 2: Basic Insertions ---" << endl;
@@ -249,6 +252,7 @@ void HashMapChainingTest(){
     cout << "insert(2, two) should be 1: " << table.insert(2, "two") << endl;
     cout << "insert(3, three) should be 1: " << table.insert(3, "three") << endl;
     cout << "Load factor should be about 3/23 ~= 0.1304: " << table.getLoadFactor() << endl;
+    cout << "Size should be 3: " << table.getSize() << endl;
     cout << endl;
 
     cout << "--- Test 3: Duplicate Key Rejection ---" << endl;
@@ -274,28 +278,34 @@ void HashMapChainingTest(){
     cout << "Successful inserts from [100..124]: " << successfulInserts << endl;
     cout << "Load factor after bulk insert (should stay <= 0.75 if rehash works): "
          << table.getLoadFactor() << endl;
+        cout << "Capacity after possible rehash should be >= 23: " << table.getCapacity() << endl;
 
     cout << endl;
     cout << "--- Test 6: Get Existing Keys ---" << endl;
-    cout << "get(1) should be one: " << table.get(1) << endl;
-    cout << "get(24) should be twenty-four: " << table.get(24) << endl;
-    cout << "get(124) should be value_124: " << table.get(124) << endl;
+        if (table.get(1, out)) cout << "get(1) should be one: " << out << endl;
+        else cout << "get(1) failed unexpectedly" << endl;
+        if (table.get(24, out)) cout << "get(24) should be twenty-four: " << out << endl;
+        else cout << "get(24) failed unexpectedly" << endl;
+        if (table.get(124, out)) cout << "get(124) should be value_124: " << out << endl;
+        else cout << "get(124) failed unexpectedly" << endl;
 
     cout << endl;
     cout << "--- Test 7: Get Missing Key ---" << endl;
-    string missing = table.get(9999);
-    cout << "get(9999) should return empty string default: '" << missing << "'" << endl;
+        bool foundMissing = table.get(9999, out);
+        cout << "get(9999) should return false: " << foundMissing << endl;
 
     cout << endl;
     cout << "--- Test 8: Remove Existing Key ---" << endl;
     double beforeRemove = table.getLoadFactor();
+        int sizeBeforeRemove = table.getSize();
     table.remove(24);
-    string removedCheck = table.get(24);
+        bool removedCheck = table.get(24, out);
     double afterRemove = table.getLoadFactor();
-    cout << "After remove(24), get(24) should be empty: '" << removedCheck << "'" << endl;
+        cout << "After remove(24), get(24) should return false: " << removedCheck << endl;
     cout << "Load factor should decrease:" << endl;
     cout << "  before: " << beforeRemove << endl;
     cout << "  after : " << afterRemove << endl;
+        cout << "Size should decrease by 1: " << sizeBeforeRemove << " -> " << table.getSize() << endl;
 
     cout << endl;
     cout << "--- Test 9: Remove Missing Key ---" << endl;
@@ -307,6 +317,15 @@ void HashMapChainingTest(){
     cout << "  after : " << afterMissingRemove << endl;
 
     cout << endl;
+        cout << "--- Test 10: Clear / Size / Capacity ---" << endl;
+        int capBeforeClear = table.getCapacity();
+        table.clear();
+        cout << "After clear, size should be 0: " << table.getSize() << endl;
+        cout << "After clear, load factor should be 0: " << table.getLoadFactor() << endl;
+        cout << "Capacity should remain unchanged after clear: "
+            << capBeforeClear << " -> " << table.getCapacity() << endl;
+
+        cout << endl;
     cout << "Final table snapshot:" << endl;
     table.print();
     cout << endl;

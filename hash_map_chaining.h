@@ -15,7 +15,6 @@ Open hashing via chaining
 */
 #pragma once
 #include "linked_list.h"
-#include <string>
 #include <vector>
 using namespace std;
 
@@ -30,14 +29,13 @@ class HashMapChaining{
 public:
     HashMapChaining();//constructor
     bool insert(int key, const T& value); // should account for duplicate keys and rehashing when appropirate, returns true if inserted false if not, already there,
-    T get(int key); // get a value by key, if the key is found
+    bool get(int key, T& out); // returns true if key found and writes value to out
     void remove(int key);
     void print();// print the whole hash table with values.
     double getLoadFactor();
-
-    //destructor
-    //copy constructor
-    //copy assignment
+    void clear(); // resets table
+    int getSize() { return size; } // returns active pairs count
+    int getCapacity() { return capacity; } // returns table size
 
     
 

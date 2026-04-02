@@ -158,6 +158,18 @@ T LinkedList<T>::deleteAt(int index){
 }
 
 template <typename T>
+void LinkedList<T>::clear(){
+    Node<T>* p = head; //p to track what to delete
+    while(head){
+        head = head->next;
+        delete p;
+        p = head;
+    }
+    head = nullptr;
+    length = 0;
+}
+
+template <typename T>
 T LinkedList<T>::at(int index){
     if(index<0 || index>=length){
         std::cout<<"out of range access\n";

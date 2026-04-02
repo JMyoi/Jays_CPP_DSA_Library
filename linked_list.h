@@ -16,6 +16,7 @@ class LinkedList{
         void insertFront(const T& data);
         void insertAt(int index, const T& data);
         T deleteAt(int index);
+        void clear();
         T at(int index);
         int find(const T& key);
         int getLength();
