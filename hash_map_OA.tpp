@@ -15,6 +15,8 @@ HashMapOA<T>::HashMapOA(bool probeType){
 template <typename T> 
 bool HashMapOA<T>::insert(int key, const T& value){
     //rehash when loading factor > 0.7
+    if(getLoadFactor() > 0.7) 
+        rehash();
 
     int firstDeleted = -1;
 
@@ -65,5 +67,12 @@ int HashMapOA<T>::computeHash(int key){
 
 template <typename T>
 void HashMapOA<T>::rehash(){
+    vector<KVPair<T>> oldTable = HashTable;
+    HashTable.clear();
+    capacity*=2;
+    HashTable.resize(capacity);
+    size = 0;
+    //for every element in the old table, if there is a occupied then insert that key into our HashTable, 
+    
 
 }
