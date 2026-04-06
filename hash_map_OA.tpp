@@ -17,7 +17,7 @@ bool HashMapOA<T>::insert(int key, const T& value){
     //rehash when loading factor > 0.7
     if(getLoadFactor() > 0.7) 
         rehash();
-
+    //keeps track of the first index that has status deleted, we will insert here if we continue probing and we meet no duplicate keys as the one trying to be inserted
     int firstDeleted = -1;
 
     for (int i = 0; i < capacity; i++) {
@@ -36,14 +36,14 @@ bool HashMapOA<T>::insert(int key, const T& value){
             continue;
         }
 
-        // if we reached here, Status::empty => key is definitely not later in chain, just insert here or if we had a saved index from first delted, do that instead
+        // if we reached a Status::empty => key is definitely not later in chain, just insert here or if we had a saved index from first delted, do that instead
         int target = (firstDeleted != -1) ? firstDeleted : index;
         HashTable.at(target) = KVPair<T>{key, value, Status::occupied};
         size++;
         return true;
     }
 
-    // Full probe cycle: use remembered tombstone if we saw one
+    // Here we have cycled through the whole hash table: use remembered tombstone if we saw one, all were occupied and none were duplicates
     if (firstDeleted != -1) {
         HashTable.at(firstDeleted) = KVPair<T>{key, value, Status::occupied};
         size++;
@@ -52,6 +52,63 @@ bool HashMapOA<T>::insert(int key, const T& value){
 
     return false; // table full, no slot available
 }
+
+template <typename T>
+bool HashMapOA<T>::get(int key, T& value){
+
+    int index = computeHash(key);
+
+    //if a state is deleted it does not mean it is not found, it could still be found in further indices, but if it is empty then it is definitly not found later
+    for (int i = 0; i < capacity; i++) {
+        if (HashTable.at(index).status == Status::empty) {
+            return false;
+        }
+        if (HashTable.at(index).status == Status::occupied && HashTable.at(index).key == key) {
+            value = HashTable.at(index).value;
+            return true;
+        }
+        //Wraparound prevents out-of-range access.
+        index = (index + 1) % capacity;
+    }
+
+    return false;
+}
+
+template <typename T>
+bool HashMapOA<T>::remove(int key){
+    int index = computeHash(key);
+
+    for(int i = 0; i< capacity; i++){
+        if(HashTable.at(index).status == Status::empty)
+            return false;
+        if(HashTable.at(index).status == Status::occupied && HashTable.at(index).key == key){
+            HashTable.at(index).status = Status::deleted;
+            size--;
+            return true;
+        }
+        index = (index + 1) % capacity;
+    }
+    return false;
+}
+
+template <typename T>
+void HashMapOA<T>::print(){
+    for(int i = 0; i< capacity; i++){
+        cout<<i;
+        if(HashTable.at(i).status == Status::occupied)
+            cout<<" Key:"<< HashTable.at(i).key<<", Value:"<<HashTable.at(i).value<<endl;
+        else
+            cout<<endl;
+    }
+}
+
+template <typename T>
+void HashMapOA<T>::clear(){
+    HashTable.clear();
+    HashTable.resize(capacity);
+    size = 0;
+}
+
 
 template <typename T>
 double HashMapOA<T>::getLoadFactor(){
@@ -73,6 +130,9 @@ void HashMapOA<T>::rehash(){
     HashTable.resize(capacity);
     size = 0;
     //for every element in the old table, if there is a occupied then insert that key into our HashTable, 
-    
+    for(int i = 0; i<oldTable.size(); i++){
+        if (oldTable.at(i).status == Status::occupied)
+            insert(oldTable.at(i).key, oldTable.at(i).value);
+    }
 
 }

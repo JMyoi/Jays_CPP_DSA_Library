@@ -8,6 +8,7 @@ rehash when load factor > 0.7
 
 #pragma once
 #include <vector>
+
 using namespace std;
 
 //For open addressing we need to keep track of the state of each Data entry, 
@@ -20,7 +21,6 @@ struct KVPair{
     int key;
     T value;
     Status status = Status::empty;
-
 };
 
 template <typename T>
@@ -28,11 +28,11 @@ class HashMapOA{
 public:
     HashMapOA(bool probeType = false);
     bool insert(int key, const T& vlaue); // fails if tyrying to insert duplicate key
-    bool get(int key, T&out);
+    bool get(int key, T& value);
     bool remove(int key);// returns false if key was not found
     void print();
-    double getLoadFactor();
     void clear();
+    double getLoadFactor();
     int getSize(){return size;}
     int getCapacity(){return capacity;}
 

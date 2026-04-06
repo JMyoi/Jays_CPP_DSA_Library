@@ -1,11 +1,54 @@
 #include <iostream>
 #include <vector>
+#include <limits>
 #include "test_bench.cpp"
 using namespace std;
 
 
 int main(){
-    HashMapChainingTest();
+    int choice = -1;
+
+    do {
+        cout << "\n========================================" << endl;
+        cout << "        DSA Library Test Menu" << endl;
+        cout << "========================================" << endl;
+        cout << "1. Run LinkedList Test Bench" << endl;
+        cout << "2. Run HashMap Chaining Test Bench" << endl;
+        cout << "3. Run HashMap Open Addressing Test Bench" << endl;
+        cout << "0. Exit" << endl;
+        cout << "Enter your choice: ";
+
+        if (!(cin >> choice)) {
+            if (cin.eof()) {
+                cout << "Input stream closed. Exiting test menu." << endl;
+                break;
+            }
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number from 0 to 4." << endl;
+            continue;
+        }
+
+        cout << endl;
+
+        switch (choice) {
+            case 1:
+                LinkedListTest();
+                break;
+            case 2:
+                HashMapChainingTest();
+                break;
+            case 3:
+                HashMapOATest();
+                break;
+            case 0:
+                cout << "Exiting test menu." << endl;
+                break;
+            default:
+                cout << "Invalid choice. Please enter a number from 0 to 4." << endl;
+                break;
+        }
+    } while (choice != 0);
 
     return 0;
 } 
