@@ -43,6 +43,7 @@ private:
     bool probeType; // false for linear probling, true for quadratic probing
 
     int computeHash(int key);
+    int computeQuadHash(int key);
     void rehash();
 };
 
