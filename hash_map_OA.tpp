@@ -21,7 +21,7 @@ bool HashMapOA<T>::insert(int key, const T& value){
     int firstDeleted = -1;
 
     for (int i = 0; i < capacity; i++) {
-        int index = computeHash(key + i); // linear probing
+        int index = computeLinearHash(key + i); // linear probing
 
         if (HashTable.at(index).status == Status::occupied) {
             if (HashTable.at(index).key == key) {
@@ -56,7 +56,7 @@ bool HashMapOA<T>::insert(int key, const T& value){
 template <typename T>
 bool HashMapOA<T>::get(int key, T& value){
 
-    int index = computeHash(key);
+    int index = computeLinearHash(key);
 
     //if a state is deleted it does not mean it is not found, it could still be found in further indices, but if it is empty then it is definitly not found later
     for (int i = 0; i < capacity; i++) {
@@ -76,7 +76,7 @@ bool HashMapOA<T>::get(int key, T& value){
 
 template <typename T>
 bool HashMapOA<T>::remove(int key){
-    int index = computeHash(key);
+    int index = computeLinearHash(key);
 
     for(int i = 0; i< capacity; i++){
         if(HashTable.at(index).status == Status::empty)
@@ -117,7 +117,7 @@ double HashMapOA<T>::getLoadFactor(){
 
 
 template <typename T>
-int HashMapOA<T>::computeHash(int key){
+int HashMapOA<T>::computeLinearHash(int key){
     return ((key % capacity) + capacity) % capacity; // modulo normalization to handle negative keys
 }
 

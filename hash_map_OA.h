@@ -42,7 +42,8 @@ private:
     int capacity;
     bool probeType; // false for linear probling, true for quadratic probing
 
-    int computeHash(int key);
+    int computeLinearHash(int key);
+    int computeQuadraticHash(int key);
     void rehash();
 };
 
