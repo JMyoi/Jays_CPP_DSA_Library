@@ -2,6 +2,7 @@
 #include "hash_map_OA.h"
 #include <iostream>
 #include <vector>
+#include <cmath>
 using namespace std;
 
 template <typename T>
@@ -21,7 +22,10 @@ bool HashMapOA<T>::insert(int key, const T& value){
     int firstDeleted = -1;
 
     for (int i = 0; i < capacity; i++) {
-        int index = computeLinearHash(key + i); // linear probing
+        //depending on probe type, do linear or quadratic hash
+        int index = (probeType) 
+            ? (computeHash(key) + (int)pow(i, 2)) % capacity
+            : computeHash(key + i); 
 
         if (HashTable.at(index).status == Status::occupied) {
             if (HashTable.at(index).key == key) {
@@ -56,10 +60,12 @@ bool HashMapOA<T>::insert(int key, const T& value){
 template <typename T>
 bool HashMapOA<T>::get(int key, T& value){
 
-    int index = computeLinearHash(key);
-
+    
     //if a state is deleted it does not mean it is not found, it could still be found in further indices, but if it is empty then it is definitly not found later
     for (int i = 0; i < capacity; i++) {
+        int index = (probeType) 
+                ? (computeHash(key) + (int)pow(i, 2)) % capacity
+                : computeHash(key + i); 
         if (HashTable.at(index).status == Status::empty) {
             return false;
         }
@@ -67,8 +73,6 @@ bool HashMapOA<T>::get(int key, T& value){
             value = HashTable.at(index).value;
             return true;
         }
-        //Wraparound prevents out-of-range access.
-        index = (index + 1) % capacity;
     }
 
     return false;
@@ -76,9 +80,11 @@ bool HashMapOA<T>::get(int key, T& value){
 
 template <typename T>
 bool HashMapOA<T>::remove(int key){
-    int index = computeLinearHash(key);
-
+    
     for(int i = 0; i< capacity; i++){
+        int index = (probeType) 
+                ? (computeHash(key) + (int)pow(i, 2)) % capacity
+                : computeHash(key + i); 
         if(HashTable.at(index).status == Status::empty)
             return false;
         if(HashTable.at(index).status == Status::occupied && HashTable.at(index).key == key){
@@ -86,7 +92,6 @@ bool HashMapOA<T>::remove(int key){
             size--;
             return true;
         }
-        index = (index + 1) % capacity;
     }
     return false;
 }
@@ -117,9 +122,11 @@ double HashMapOA<T>::getLoadFactor(){
 
 
 template <typename T>
-int HashMapOA<T>::computeLinearHash(int key){
+int HashMapOA<T>::computeHash(int key){
     return ((key % capacity) + capacity) % capacity; // modulo normalization to handle negative keys
 }
+
+
 
 
 template <typename T>

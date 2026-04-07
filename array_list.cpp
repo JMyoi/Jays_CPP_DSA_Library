@@ -14,12 +14,12 @@ ArrayList::~ArrayList(){
 }
 
 int ArrayList::Get(int index){
-    if(index<size){
+    if(index >= 0 && index < size){
       return arr[index];
     }
     else{
         cout<<"Cannot get out of range\n";
-        // 
+        return -1;
     }
 }
 

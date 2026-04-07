@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <limits>
-#include "test_bench.cpp"
+#include "test_bench.h"
 using namespace std;
 
 
