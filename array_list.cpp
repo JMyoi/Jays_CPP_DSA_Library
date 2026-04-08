@@ -1,83 +1,59 @@
 #include "array_list.h"
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
 ArrayList::ArrayList(int capacity){
+    if (capacity < 0) {
+        throw invalid_argument("ArrayList capacity cannot be negative");
+    }
     this->capacity = capacity;
     arr = new int[capacity];
     size = 0;
 }
 
 ArrayList::~ArrayList(){
-    cout<<"destructor called\n";
+    //cout<<"destructor called\n";
     delete []arr;
 }
 
-int ArrayList::Get(int index){
-    if(index >= 0 && index < size){
-      return arr[index];
-    }
-    else{
-        cout<<"Cannot get out of range\n";
-        return -1;
-    }
-}
-
-void ArrayList::Display(){
-    for(int i = 0; i<size; i++){
-        cout<<arr[i]<<" ";
-    }
-    cout<<endl;
-}
-
-int ArrayList::Size(){
-    return size;
-}
-int ArrayList::Capacity(){
-    return capacity;
-}
-
 void ArrayList::Append(int x){
-    if(capacity>size){ //then we can append
-        arr[size++] = x; // post incriement will assign arr[size] = x, then incriment size++
-    }
-    else{// else it is not big enough and we have to allocate a new array.
-        int *temp = new int[capacity+10]; // give buffer of 10 
-        //copy over all elemetns from old array to new one
-        for(int i = 0; i<capacity; i++){
+    if (size == capacity){ // allocate 2x or if capacity is 0 start at 1
+        int newCapacity = (capacity == 0) ? 1 : capacity * 2;
+        int* temp = new int[newCapacity];
+        for (int i = 0; i < size; i++){
             temp[i] = arr[i];
         }
-        capacity = capacity + 10;
-        temp[size] = x;//
-        size++;
-        // delete old array and make arr point to the new array
-        delete []arr;
+        delete[] arr;
         arr = temp;
+        capacity = newCapacity;
     }
-    
+    arr[size++] = x;
 }
 
-//capacity = 10, insert at
 
-void ArrayList::Insert(int index, int x){
-    //account for index out of range.
-    // if size = capacity then not enough space to insert. 
-    //update it so that it allocated space for inserting. Just like vector ADT
-    if(size == capacity){
-        cout<<"Array has hit it's capacity, not enough space to insert\n";
-        return;
+bool ArrayList::Insert(int index, int x){
+
+    if(index < 0 || index > size){
+        cout<<"Index Out of Range";
+        return false;
     }
-    if(index>0 && index<=size){
-       // shift items to the right to make space at index.
-        for(int i = size; i>index; i--){
-            arr[i] = arr[i-1]; 
+    if(size == capacity){ // reallocate bigger size
+        capacity = (capacity == 0)? 1 : capacity*2;
+        int* temp = new int[capacity];
+        for(int i = 0; i<size; i++){// copy over old to new
+            temp[i] = arr[i];
         }
-        arr[index] = x;
-        size++;
+        delete[] arr;
+        arr = temp;
     }
-    else{
-        cout<<"Index Out of Range!\n";
+    //shift items to right ot make space for new element
+    for(int i = size; i > index; i--){
+        arr[i] = arr[i-1];
     }
+    arr[index] = x;
+    size++;
+    return true;
     
 }
 
@@ -94,7 +70,35 @@ void ArrayList::Delete(int index){
     }
 }
 
-int ArrayList::LinearSearch(int x){
+bool ArrayList::Get(int index, int& out) const{
+    if(index >= 0 && index < size){
+      out = arr[index];
+      return true;
+    }
+    else{
+        cout<<"Cannot get out of range\n";
+        return false;
+    }
+}
+
+void ArrayList::Display(){
+    for(int i = 0; i<size; i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+}
+
+int ArrayList::Size() const{
+    return size;
+}
+int ArrayList::Capacity() const{
+    return capacity;
+}
+
+
+
+
+int ArrayList::LinearSearch(int x) const{
     for(int i  = 0; i<size; i++){
         if(arr[i] == x){
             return i;

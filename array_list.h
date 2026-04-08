@@ -7,15 +7,15 @@ public:
     //copy assignment operator
     //copy constructor
     void Display();
-    int Size(); // size of List
-    int Capacity();
+    int Size() const; // size of List
+    int Capacity() const;
     void Append(int x); // add to end of list
-    void Insert(int index, int x); // add x at index 
+    bool Insert(int index, int x); // add x at index 
     void Delete(int index); // delete element at index
-    int LinearSearch(int x); // search for element x and return the index.
-    int Get(int index); // return element at index
+    int LinearSearch(int x) const; // search for element x and return the index.
+    bool Get(int index, int& out) const; // return element at index
 private:
     int* arr;
     int capacity;
-    int size;
+    int size; // not zero indexed, actuall size, no need to +1, so accesing arr[size] is out of bound
 };

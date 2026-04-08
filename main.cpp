@@ -12,9 +12,10 @@ int main(){
         cout << "\n========================================" << endl;
         cout << "        DSA Library Test Menu" << endl;
         cout << "========================================" << endl;
-        cout << "1. Run LinkedList Test Bench" << endl;
-        cout << "2. Run HashMap Chaining Test Bench" << endl;
-        cout << "3. Run HashMap Open Addressing Test Bench" << endl;
+        cout << "1. Run ArrayList Test Bench" << endl;
+        cout << "2. Run LinkedList Test Bench" << endl;
+        cout << "3. Run HashMap Chaining Test Bench" << endl;
+        cout << "4. Run HashMap Open Addressing Test Bench" << endl;
         cout << "0. Exit" << endl;
         cout << "Enter your choice: ";
 
@@ -33,12 +34,15 @@ int main(){
 
         switch (choice) {
             case 1:
-                LinkedListTest();
+                ArrayListTest();
                 break;
             case 2:
-                HashMapChainingTest();
+                LinkedListTest();
                 break;
             case 3:
+                HashMapChainingTest();
+                break;
+            case 4:
                 HashMapOATest();
                 break;
             case 0:
