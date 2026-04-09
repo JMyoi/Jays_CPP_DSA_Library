@@ -128,6 +128,28 @@ void ArrayListTest(){
     cout << "Assigned size should still be 3: " << assigned.Size() << endl;
     cout << endl;
 
+    cout << "--- Test 11: Binary Search (Recursive + Iterative) ---" << endl;
+    ArrayList sorted;
+    for (int value = 10; value <= 100; value += 10) {
+        sorted.Append(value);
+    }
+    cout << "Sorted list should be 10 20 30 40 50 60 70 80 90 100: ";
+    sorted.Display();
+    cout << "binarySearch(10, true) should be 0: " << sorted.binarySearch(10, true) << endl;
+    cout << "binarySearch(70, true) should be 6: " << sorted.binarySearch(70, true) << endl;
+    cout << "binarySearch(100, true) should be 9: " << sorted.binarySearch(100, true) << endl;
+    cout << "binarySearch(55, true) should be -1: " << sorted.binarySearch(55, true) << endl;
+    cout << "binarySearch(10, false) should be 0: " << sorted.binarySearch(10, false) << endl;
+    cout << "binarySearch(70, false) should be 6: " << sorted.binarySearch(70, false) << endl;
+    cout << "binarySearch(100, false) should be 9: " << sorted.binarySearch(100, false) << endl;
+    cout << "binarySearch(55, false) should be -1: " << sorted.binarySearch(55, false) << endl;
+
+    ArrayList emptySorted;
+    cout << "binarySearch on empty list should be -1: "
+         << emptySorted.binarySearch(10, true) << ", "
+         << emptySorted.binarySearch(10, false) << endl;
+    cout << endl;
+
     cout << "=== ARRAY LIST TEST COMPLETE ===" << endl;
 }
 

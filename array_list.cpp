@@ -117,15 +117,40 @@ int ArrayList::Capacity() const{
     return capacity;
 }
 
-
-
-
-int ArrayList::LinearSearch(int x) const{
+int ArrayList::LinearSearch(int key) const{
     for(int i  = 0; i<size; i++){
-        if(arr[i] == x){
+        if(arr[i] == key){
             return i;
         }
     }
     return -1;
 }
 
+//wraper function for the private helper
+int ArrayList::binarySearch(int key, bool recVer) const{
+    int index = recVer ? binSearch(key, 0, size-1) :  binSearchIter(key, 0, size-1);
+    return index;
+}
+
+//recursive version
+int ArrayList::binSearch(int key, int low, int high) const{
+    if(high < low){ // base case
+        return -1;
+    }
+    int mid = (low + high) / 2;
+    if(arr[mid] == key) return mid;
+    else if(key < arr[mid]) return binSearch(key, low, mid-1);
+    else if(key > arr[mid]) return binSearch(key, mid+1, high);
+}
+//iterative version
+int ArrayList::binSearchIter(int key, int low, int high) const{
+    while(high >= low){
+        int mid = (low + high) / 2;
+        if(arr[mid] == key){
+            return mid;
+        }
+        if(key < arr[mid]) high = mid - 1;
+        if(key > arr[mid]) low = mid + 1;
+    }   
+    return -1;
+}
