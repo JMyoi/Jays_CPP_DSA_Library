@@ -88,6 +88,46 @@ void ArrayListTest(){
     }
     cout << endl;
 
+    cout << "--- Test 9: Copy Constructor Deep Copy ---" << endl;
+    ArrayList original;
+    original.Append(11);
+    original.Append(22);
+    original.Append(33);
+    ArrayList copied(original);
+    cout << "Original should be 11 22 33: ";
+    original.Display();
+    cout << "Copied should be 11 22 33: ";
+    copied.Display();
+    original.Delete(0); // mutate source after copy
+    original.Append(44);
+    cout << "Original after mutation should be 22 33 44: ";
+    original.Display();
+    cout << "Copied should remain 11 22 33: ";
+    copied.Display();
+    cout << "Copied size should be 3: " << copied.Size() << endl;
+    cout << endl;
+
+    cout << "--- Test 10: Copy Assignment Deep Copy + Self-Assignment ---" << endl;
+    ArrayList assigned;
+    assigned.Append(1);
+    assigned.Append(2);
+    cout << "Assigned before copy (should be 1 2): ";
+    assigned.Display();
+    assigned = original;
+    cout << "Assigned after assigned = original (should be 22 33 44): ";
+    assigned.Display();
+    assigned.Delete(1);
+    assigned.Append(55);
+    cout << "Assigned after mutation should be 22 44 55: ";
+    assigned.Display();
+    cout << "Original should remain 22 33 44: ";
+    original.Display();
+    assigned = assigned;
+    cout << "Assigned after self-assignment should be unchanged: ";
+    assigned.Display();
+    cout << "Assigned size should still be 3: " << assigned.Size() << endl;
+    cout << endl;
+
     cout << "=== ARRAY LIST TEST COMPLETE ===" << endl;
 }
 

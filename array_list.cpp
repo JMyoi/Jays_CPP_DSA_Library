@@ -17,6 +17,28 @@ ArrayList::~ArrayList(){
     delete []arr;
 }
 
+ArrayList::ArrayList(const ArrayList& origList){
+    capacity = origList.capacity;
+    size = origList.size;
+    arr = new int[capacity];
+    for(int i = 0; i<size; i++){
+        arr[i] = origList.arr[i];
+    }
+}
+
+ArrayList& ArrayList::operator=(const ArrayList& listToCopy){
+    if(this != &listToCopy){
+        capacity = listToCopy.capacity;
+        size = listToCopy.size;
+        delete[] arr;
+        arr = new int[capacity];
+        for(int i = 0; i<size; i++){
+            arr[i] = listToCopy.arr[i];
+        }
+    }
+    return *this;
+}
+
 void ArrayList::Append(int x){
     if (size == capacity){ // allocate 2x or if capacity is 0 start at 1
         int newCapacity = (capacity == 0) ? 1 : capacity * 2;

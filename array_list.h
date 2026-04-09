@@ -4,8 +4,9 @@ class ArrayList{
 public:
     ArrayList(int capacity = 10);//two in one constructor default constructor
     ~ArrayList(); // destructor for dynamically allocated array
-    //copy assignment operator
-    //copy constructor
+    ArrayList(const ArrayList& origList); // copy constructor
+    ArrayList& operator=(const ArrayList& listToCopy); // copy assignment
+
     void Display();
     int Size() const; // size of List
     int Capacity() const;
