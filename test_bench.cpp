@@ -1,8 +1,157 @@
 #include <iostream>
+#include "array_list.h"
 #include "linked_list.h"
 #include "hash_map_chaining.h"
 #include "hash_map_OA.h"
 using namespace std;
+
+void ArrayListTest(){
+    cout << "=== ARRAY LIST TEST BENCH ===" << endl << endl;
+
+    cout << "--- Test 1: Default Construction ---" << endl;
+    ArrayList list;
+    cout << "Size should be 0: " << list.Size() << endl;
+    cout << "Capacity should be 10: " << list.Capacity() << endl;
+    cout << "Display() should show nothing: ";
+    list.Display();
+    cout << endl;
+
+    cout << "--- Test 2: Append Within Capacity ---" << endl;
+    for (int value = 1; value <= 5; value++) {
+        list.Append(value * 10);
+    }
+    cout << "List should be 10 20 30 40 50: ";
+    list.Display();
+    cout << "Size should be 5: " << list.Size() << endl;
+    cout << "Capacity should still be 10: " << list.Capacity() << endl;
+    cout << "Get(2) should succeed with 30: ";
+    int out = -1;
+    if (list.Get(2, out)) cout << out << endl;
+    else cout << "failed" << endl;
+    cout << endl;
+
+    cout << "--- Test 3: Append Past Capacity ---" << endl;
+    for (int value = 6; value <= 12; value++) {
+        list.Append(value * 10);
+    }
+    cout << "List should be 10 through 120 in steps of 10: ";
+    list.Display();
+    cout << "Size should be 12: " << list.Size() << endl;
+    cout << "Capacity should have grown: " << list.Capacity() << endl;
+    cout << "LinearSearch(70) should be 6: " << list.LinearSearch(70) << endl;
+    cout << "LinearSearch(999) should be -1: " << list.LinearSearch(999) << endl;
+    cout << endl;
+
+    cout << "--- Test 4: Insert Valid Positions ---" << endl;
+    ArrayList insertList(4);
+    cout << "Insert into empty list at index 0: " << insertList.Insert(0, 100) << endl;
+    cout << "Insert at end (index == size): " << insertList.Insert(1, 200) << endl;
+    cout << "Insert in middle: " << insertList.Insert(1, 150) << endl;
+    cout << "Current list should be 100 150 200: ";
+    insertList.Display();
+    cout << "Size should be 3: " << insertList.Size() << endl;
+    cout << endl;
+
+    cout << "--- Test 5: Insert Invalid Positions ---" << endl;
+    cout << "Insert at negative index should fail: " << insertList.Insert(-1, 5) << endl;
+    cout << "Insert past end should fail: " << insertList.Insert(10, 5) << endl;
+    cout << endl;
+
+    cout << "--- Test 6: Delete Operations ---" << endl;
+    insertList.Delete(1);
+    cout << "After Delete(1), list should be 100 200: ";
+    insertList.Display();
+    insertList.Delete(0);
+    cout << "After Delete(0), list should be 200: ";
+    insertList.Display();
+    insertList.Delete(0);
+    cout << "After Delete(0), list should be empty: ";
+    insertList.Display();
+    cout << endl;
+
+    cout << "--- Test 7: Bounds Safety ---" << endl;
+    cout << "Get(0) on empty list should fail: ";
+    if (insertList.Get(0, out)) cout << out << endl;
+    else cout << "failed" << endl;
+    cout << "Get(-1) should fail: ";
+    if (insertList.Get(-1, out)) cout << out << endl;
+    else cout << "failed" << endl;
+    cout << endl;
+
+    cout << "--- Test 8: Negative Capacity Rejection ---" << endl;
+    try {
+        ArrayList bad(-3);
+        cout << "Constructed bad list unexpectedly" << endl;
+    }
+    catch (const invalid_argument& e) {
+        cout << "Negative capacity rejected as expected: " << e.what() << endl;
+    }
+    cout << endl;
+
+    cout << "--- Test 9: Copy Constructor Deep Copy ---" << endl;
+    ArrayList original;
+    original.Append(11);
+    original.Append(22);
+    original.Append(33);
+    ArrayList copied(original);
+    cout << "Original should be 11 22 33: ";
+    original.Display();
+    cout << "Copied should be 11 22 33: ";
+    copied.Display();
+    original.Delete(0); // mutate source after copy
+    original.Append(44);
+    cout << "Original after mutation should be 22 33 44: ";
+    original.Display();
+    cout << "Copied should remain 11 22 33: ";
+    copied.Display();
+    cout << "Copied size should be 3: " << copied.Size() << endl;
+    cout << endl;
+
+    cout << "--- Test 10: Copy Assignment Deep Copy + Self-Assignment ---" << endl;
+    ArrayList assigned;
+    assigned.Append(1);
+    assigned.Append(2);
+    cout << "Assigned before copy (should be 1 2): ";
+    assigned.Display();
+    assigned = original;
+    cout << "Assigned after assigned = original (should be 22 33 44): ";
+    assigned.Display();
+    assigned.Delete(1);
+    assigned.Append(55);
+    cout << "Assigned after mutation should be 22 44 55: ";
+    assigned.Display();
+    cout << "Original should remain 22 33 44: ";
+    original.Display();
+    assigned = assigned;
+    cout << "Assigned after self-assignment should be unchanged: ";
+    assigned.Display();
+    cout << "Assigned size should still be 3: " << assigned.Size() << endl;
+    cout << endl;
+
+    cout << "--- Test 11: Binary Search (Recursive + Iterative) ---" << endl;
+    ArrayList sorted;
+    for (int value = 10; value <= 100; value += 10) {
+        sorted.Append(value);
+    }
+    cout << "Sorted list should be 10 20 30 40 50 60 70 80 90 100: ";
+    sorted.Display();
+    cout << "binarySearch(10, true) should be 0: " << sorted.binarySearch(10, true) << endl;
+    cout << "binarySearch(70, true) should be 6: " << sorted.binarySearch(70, true) << endl;
+    cout << "binarySearch(100, true) should be 9: " << sorted.binarySearch(100, true) << endl;
+    cout << "binarySearch(55, true) should be -1: " << sorted.binarySearch(55, true) << endl;
+    cout << "binarySearch(10, false) should be 0: " << sorted.binarySearch(10, false) << endl;
+    cout << "binarySearch(70, false) should be 6: " << sorted.binarySearch(70, false) << endl;
+    cout << "binarySearch(100, false) should be 9: " << sorted.binarySearch(100, false) << endl;
+    cout << "binarySearch(55, false) should be -1: " << sorted.binarySearch(55, false) << endl;
+
+    ArrayList emptySorted;
+    cout << "binarySearch on empty list should be -1: "
+         << emptySorted.binarySearch(10, true) << ", "
+         << emptySorted.binarySearch(10, false) << endl;
+    cout << endl;
+
+    cout << "=== ARRAY LIST TEST COMPLETE ===" << endl;
+}
 
 void LinkedListTest(){
     cout << "=== LINKED LIST COMPREHENSIVE TEST BENCH ===" << endl << endl;

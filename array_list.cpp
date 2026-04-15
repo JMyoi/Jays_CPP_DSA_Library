@@ -1,83 +1,81 @@
 #include "array_list.h"
 #include <iostream>
+#include <stdexcept>
 using namespace std;
 
 ArrayList::ArrayList(int capacity){
+    if (capacity < 0) {
+        throw invalid_argument("ArrayList capacity cannot be negative");
+    }
     this->capacity = capacity;
     arr = new int[capacity];
     size = 0;
 }
 
 ArrayList::~ArrayList(){
-    cout<<"destructor called\n";
+    //cout<<"destructor called\n";
     delete []arr;
 }
 
-int ArrayList::Get(int index){
-    if(index<size){
-      return arr[index];
-    }
-    else{
-        cout<<"Cannot get out of range\n";
-        // 
-    }
-}
-
-void ArrayList::Display(){
+ArrayList::ArrayList(const ArrayList& origList){
+    capacity = origList.capacity;
+    size = origList.size;
+    arr = new int[capacity];
     for(int i = 0; i<size; i++){
-        cout<<arr[i]<<" ";
+        arr[i] = origList.arr[i];
     }
-    cout<<endl;
 }
 
-int ArrayList::Size(){
-    return size;
-}
-int ArrayList::Capacity(){
-    return capacity;
+ArrayList& ArrayList::operator=(const ArrayList& listToCopy){
+    if(this != &listToCopy){
+        capacity = listToCopy.capacity;
+        size = listToCopy.size;
+        delete[] arr;
+        arr = new int[capacity];
+        for(int i = 0; i<size; i++){
+            arr[i] = listToCopy.arr[i];
+        }
+    }
+    return *this;
 }
 
 void ArrayList::Append(int x){
-    if(capacity>size){ //then we can append
-        arr[size++] = x; // post incriement will assign arr[size] = x, then incriment size++
-    }
-    else{// else it is not big enough and we have to allocate a new array.
-        int *temp = new int[capacity+10]; // give buffer of 10 
-        //copy over all elemetns from old array to new one
-        for(int i = 0; i<capacity; i++){
+    if (size == capacity){ // allocate 2x or if capacity is 0 start at 1
+        int newCapacity = (capacity == 0) ? 1 : capacity * 2;
+        int* temp = new int[newCapacity];
+        for (int i = 0; i < size; i++){
             temp[i] = arr[i];
         }
-        capacity = capacity + 10;
-        temp[size] = x;//
-        size++;
-        // delete old array and make arr point to the new array
-        delete []arr;
+        delete[] arr;
         arr = temp;
+        capacity = newCapacity;
     }
-    
+    arr[size++] = x;
 }
 
-//capacity = 10, insert at
 
-void ArrayList::Insert(int index, int x){
-    //account for index out of range.
-    // if size = capacity then not enough space to insert. 
-    //update it so that it allocated space for inserting. Just like vector ADT
-    if(size == capacity){
-        cout<<"Array has hit it's capacity, not enough space to insert\n";
-        return;
+bool ArrayList::Insert(int index, int x){
+
+    if(index < 0 || index > size){
+        cout<<"Index Out of Range";
+        return false;
     }
-    if(index>0 && index<=size){
-       // shift items to the right to make space at index.
-        for(int i = size; i>index; i--){
-            arr[i] = arr[i-1]; 
+    if(size == capacity){ // reallocate bigger size
+        capacity = (capacity == 0)? 1 : capacity*2;
+        int* temp = new int[capacity];
+        for(int i = 0; i<size; i++){// copy over old to new
+            temp[i] = arr[i];
         }
-        arr[index] = x;
-        size++;
+        delete[] arr;
+        arr = temp;
     }
-    else{
-        cout<<"Index Out of Range!\n";
+    //shift items to right ot make space for new element
+    for(int i = size; i > index; i--){
+        arr[i] = arr[i-1];
     }
+    arr[index] = x;
+    size++;
+    return true;
     
 }
 
@@ -94,12 +92,65 @@ void ArrayList::Delete(int index){
     }
 }
 
-int ArrayList::LinearSearch(int x){
+bool ArrayList::Get(int index, int& out) const{
+    if(index >= 0 && index < size){
+      out = arr[index];
+      return true;
+    }
+    else{
+        cout<<"Cannot get out of range\n";
+        return false;
+    }
+}
+
+void ArrayList::Display(){
+    for(int i = 0; i<size; i++){
+        cout<<arr[i]<<" ";
+    }
+    cout<<endl;
+}
+
+int ArrayList::Size() const{
+    return size;
+}
+int ArrayList::Capacity() const{
+    return capacity;
+}
+
+int ArrayList::LinearSearch(int key) const{
     for(int i  = 0; i<size; i++){
-        if(arr[i] == x){
+        if(arr[i] == key){
             return i;
         }
     }
     return -1;
 }
 
+//wraper function for the private helper
+int ArrayList::binarySearch(int key, bool recVer) const{
+    int index = recVer ? binSearch(key, 0, size-1) :  binSearchIter(key, 0, size-1);
+    return index;
+}
+
+//recursive version
+int ArrayList::binSearch(int key, int low, int high) const{
+    if(high < low){ // base case
+        return -1;
+    }
+    int mid = (low + high) / 2;
+    if(arr[mid] == key) return mid;
+    else if(key < arr[mid]) return binSearch(key, low, mid-1);
+    else if(key > arr[mid]) return binSearch(key, mid+1, high);
+}
+//iterative version
+int ArrayList::binSearchIter(int key, int low, int high) const{
+    while(high >= low){
+        int mid = (low + high) / 2;
+        if(arr[mid] == key){
+            return mid;
+        }
+        if(key < arr[mid]) high = mid - 1;
+        if(key > arr[mid]) low = mid + 1;
+    }   
+    return -1;
+}
