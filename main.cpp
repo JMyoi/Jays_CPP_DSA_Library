@@ -1,11 +1,29 @@
 #include <iostream>
-#include <vector>
-#include <limits>
-#include "test_bench.h"
+// #include <vector>
+// #include <limits>
+// #include "test_bench.h"
+#include "misc.h"
 using namespace std;
 
 
+
+
 int main(){
+
+cout << NaturalNumberSum(9) << endl;
+cout << Factorial(4) << endl;
+cout << exponent(2, 4) << endl;
+cout << fibonacci(5) << endl;
+cout << fib(5) << endl;
+cout << fibMemoization(5) << endl;
+
+
+
+
+
+
+
+/*
     int choice = -1;
 
     do {
@@ -53,7 +71,7 @@ int main(){
                 break;
         }
     } while (choice != 0);
-
+*/
     return 0;
 } 
 
