@@ -27,6 +27,7 @@ class LinkedList{
         void reverse();
         void reverseRec();
         void printRec();
+        void concat(const LinkedList<T>& L);
         T sum();
         T max();
 
@@ -40,3 +41,4 @@ class LinkedList{
 };
 
 #include "linked_list.tpp"
+

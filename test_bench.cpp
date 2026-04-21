@@ -122,7 +122,8 @@ void ArrayListTest(){
     assigned.Display();
     cout << "Original should remain 22 33 44: ";
     original.Display();
-    assigned = assigned;
+    ArrayList& selfRefArray = assigned;
+    assigned = selfRefArray;
     cout << "Assigned after self-assignment should be unchanged: ";
     assigned.Display();
     cout << "Assigned size should still be 3: " << assigned.Size() << endl;
@@ -367,7 +368,8 @@ void LinkedListTest(){
     cout << "Source should remain unchanged (99, 20, 10): ";
     source.print();
 
-    assigned = assigned;
+    LinkedList<int>& selfRefList = assigned;
+    assigned = selfRefList;
     cout << "After self-assignment, assigned should be unchanged: ";
     assigned.print();
     cout << "assigned length should still be 3: " << assigned.getLength() << endl;
@@ -380,6 +382,107 @@ void LinkedListTest(){
     }
     cout << "After scoped destructors, source should still be valid: ";
     source.print();
+    cout << endl;
+
+    // Test 14: Sum and Max
+    cout << "--- Test 14: Sum and Max ---" << endl;
+    LinkedList<int> L8;
+    cout << "Empty list sum() should be 0: " << L8.sum() << endl;
+    cout << "Empty list max() should be 0: " << L8.max() << endl;
+    L8.push_back(15);
+    L8.push_back(5);
+    L8.push_back(25);
+    L8.push_back(10);
+    cout << "List should be 15 5 25 10: ";
+    L8.print();
+    cout << "sum() should be 55: " << L8.sum() << endl;
+    cout << "max() should be 25: " << L8.max() << endl;
+    cout << endl;
+
+    // Test 15: Iterative Reverse
+    cout << "--- Test 15: Iterative Reverse ---" << endl;
+    LinkedList<int> L9;
+    cout << "Reversing empty list should remain empty: ";
+    L9.reverse();
+    L9.print();
+
+    L9.push_back(42);
+    cout << "Single element before reverse: ";
+    L9.print();
+    L9.reverse();
+    cout << "Single element after reverse should still be 42: ";
+    L9.print();
+
+    L9.push_back(84);
+    L9.push_back(126);
+    L9.push_back(168);
+    cout << "Before reverse should be 42 84 126 168: ";
+    L9.print();
+    L9.reverse();
+    cout << "After reverse should be 168 126 84 42: ";
+    L9.print();
+    cout << "Length should still be 4: " << L9.getLength() << endl;
+    cout << endl;
+
+    // Test 16: Recursive Reverse
+    cout << "--- Test 16: Recursive Reverse ---" << endl;
+    LinkedList<int> L10;
+    L10.push_back(1);
+    L10.push_back(2);
+    L10.push_back(3);
+    L10.push_back(4);
+    L10.push_back(5);
+    cout << "Before reverseRec should be 1 2 3 4 5: ";
+    L10.print();
+    L10.reverseRec();
+    cout << "After reverseRec should be 5 4 3 2 1: ";
+    L10.print();
+    L10.reverseRec();
+    cout << "After reverseRec again should be back to 1 2 3 4 5: ";
+    L10.print();
+    cout << "Length should still be 5: " << L10.getLength() << endl;
+    cout << endl;
+
+    // Test 17: Concat
+    cout << "--- Test 17: Concat ---" << endl;
+    LinkedList<int> C1;
+    C1.push_back(1);
+    C1.push_back(2);
+    C1.push_back(3);
+    LinkedList<int> C2;
+    C2.push_back(4);
+    C2.push_back(5);
+    cout << "C1 before concat should be 1 2 3: ";
+    C1.print();
+    cout << "C2 should be 4 5: ";
+    C2.print();
+    C1.concat(C2);
+    cout << "C1 after C1.concat(C2) should be 1 2 3 4 5: ";
+    C1.print();
+    cout << "C1 length should be 5: " << C1.getLength() << endl;
+    cout << "C2 should remain unchanged (deep copy append): ";
+    C2.print();
+    cout << "C2 length should remain 2: " << C2.getLength() << endl;
+
+    LinkedList<int> C3;
+    C3.concat(C2);
+    cout << "Empty C3 after C3.concat(C2) should be 4 5: ";
+    C3.print();
+    cout << "C3 length should be 2: " << C3.getLength() << endl;
+
+    LinkedList<int> C4;
+    C1.concat(C4);
+    cout << "C1 after concat with empty list should stay 1 2 3 4 5: ";
+    C1.print();
+    cout << "C1 length should still be 5: " << C1.getLength() << endl;
+
+    LinkedList<int> C5;
+    C5.push_back(7);
+    C5.push_back(8);
+    C5.concat(C5);
+    cout << "C5 after self concat should be 7 8 7 8: ";
+    C5.print();
+    cout << "C5 length should be 4: " << C5.getLength() << endl;
     cout << endl;
 
     cout << "=== ALL TESTS COMPLETE ===" << endl;

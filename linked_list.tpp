@@ -22,7 +22,6 @@ LinkedList<T>::~LinkedList(){
 // copy constructor
 template <typename T>
 LinkedList<T>::LinkedList(const LinkedList& origList){
-    std::cout<<"Copy Constructor called. \n";
     //create a new list by creating each node from the origList
     length = origList.length;
     head = nullptr; // in case original list is empty
@@ -49,11 +48,9 @@ LinkedList<T>::LinkedList(const LinkedList& origList){
 //copy assignment operator
 template <typename T>
 LinkedList<T>& LinkedList<T>::operator=(const LinkedList& listToCopy){
-    std::cout<<"Copy assignment called. \n";
 
-    if(this!= &listToCopy){
-        //delete LHS  linked list
-        // can we do delete this;?
+    if(this != &listToCopy){
+        //delete all nodes in current list to make space for copy. 
         Node<T>* p = head; //p to track what to delete
         while(head){
             head = head->next;
@@ -283,16 +280,53 @@ void LinkedList<T>::reverseRec(){
     Node<T>* curr = head; 
     revRec(prev, curr);
 }
+template <typename T>
+void LinkedList<T>::concat(const LinkedList<T>& L){
+    // Create a deep copy of L, then append it to this list.
+    Node<T>* nodeTracker = L.head;// keeps track of list to copys nodes as we make copy of each
+    Node<T>* first = nullptr;//points to first node of the copy list.
+    Node<T>* prev = nullptr;// keeps track of tail of newly created list
+    Node<T>* curr = nullptr;//tracks newly created nodes
+    while(nodeTracker != nullptr){
+        curr = new Node<T>{nodeTracker->data, nullptr};
+        if(first == nullptr){
+            first = curr;
+        }
+        else{
+            prev->next = curr;
+        }
+        prev = curr;
+        nodeTracker = nodeTracker->next;
+    }
+
+    // Nothing to append.
+    if(first == nullptr){
+        return;
+    }
+
+    if(head == nullptr){
+        head = first;
+    }
+    else{
+        Node<T>* tail = head;
+        while(tail->next != nullptr){
+            tail = tail->next;
+        }
+        tail->next = first;
+    }
+
+    length += L.length;
+}
 
 
 //helper funcitons
 template <typename T>
 void LinkedList<T>::revRec(Node<T>* prev, Node<T>* curr){
-    if(p != nullptr){
-        revereseRec(curr, curr->next);
+    if(curr != nullptr){
+        revRec(curr, curr->next);
         curr->next = prev;
     }
-    else   
+    else
         head = prev;
 }
 

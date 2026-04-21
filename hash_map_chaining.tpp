@@ -122,7 +122,7 @@ void HashMapChaining<T>::rehash(){
     HashTable.resize(capacity);
     //insert all keys from old table to new one
     size = 0;// start back at 0 and insert will incriment to appropriate size, or else it may rehash due to having the old size value
-    for(int i = 0; i<oldTable.size(); i++){
+    for(size_t i = 0; i < oldTable.size(); i++){
         //check if that indexs linked list is empty, if it is then continue to next index
         if(oldTable.at(i).getLength() == 0) continue;
         //for every node in that linked list, we will reinsert it into the new table
