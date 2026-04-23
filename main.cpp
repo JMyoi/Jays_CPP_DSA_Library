@@ -19,6 +19,7 @@ int main(){
         cout << "2. Run LinkedList Test Bench" << endl;
         cout << "3. Run HashMap Chaining Test Bench" << endl;
         cout << "4. Run HashMap Open Addressing Test Bench" << endl;
+        cout << "5. Run Stack Test Bench" << endl;
         cout << "0. Exit" << endl;
         cout << "Enter your choice: ";
 
@@ -29,7 +30,7 @@ int main(){
             }
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input. Please enter a number from 0 to 4." << endl;
+            cout << "Invalid input. Please enter a number from 0 to 5." << endl;
             continue;
         }
 
@@ -48,11 +49,14 @@ int main(){
             case 4:
                 HashMapOATest();
                 break;
+            case 5:
+                StackTest();
+                break;
             case 0:
                 cout << "Exiting test menu." << endl;
                 break;
             default:
-                cout << "Invalid choice. Please enter a number from 0 to 4." << endl;
+                cout << "Invalid choice. Please enter a number from 0 to 5." << endl;
                 break;
         }
     } while (choice != 0);
