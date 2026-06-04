@@ -6,6 +6,7 @@ public:
     ~ArrayList(); // destructor for dynamically allocated array
     ArrayList(const ArrayList& origList); // copy constructor
     ArrayList& operator=(const ArrayList& listToCopy); // copy assignment
+    //TODO overload comparison operator == 
 
     void Display();
     int Size() const; // size of List

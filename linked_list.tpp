@@ -22,7 +22,6 @@ LinkedList<T>::~LinkedList(){
 // copy constructor
 template <typename T>
 LinkedList<T>::LinkedList(const LinkedList& origList){
-    std::cout<<"Copy Constructor called. \n";
     //create a new list by creating each node from the origList
     length = origList.length;
     head = nullptr; // in case original list is empty
@@ -49,11 +48,9 @@ LinkedList<T>::LinkedList(const LinkedList& origList){
 //copy assignment operator
 template <typename T>
 LinkedList<T>& LinkedList<T>::operator=(const LinkedList& listToCopy){
-    std::cout<<"Copy assignment called. \n";
 
-    if(this!= &listToCopy){
-        //delete LHS  linked list
-        // can we do delete this;?
+    if(this != &listToCopy){
+        //delete all nodes in current list to make space for copy. 
         Node<T>* p = head; //p to track what to delete
         while(head){
             head = head->next;
@@ -99,11 +96,11 @@ void LinkedList<T>::insertFront(const T& data){
 
 /*TODO: account for inserting at one past the last node, length = 5, insert at 6.*/
 template <typename T>
-void LinkedList<T>::insertAt(int index, const T& data){
+bool LinkedList<T>::insertAt(int index, const T& data){
     // out of range
     if (index<0 || index>length){
         std::cout<<"trying to insert out of range\n";
-        return;
+        return false;
     }
     //create new node
     Node<T>* temp = new Node<T>;
@@ -114,7 +111,7 @@ void LinkedList<T>::insertAt(int index, const T& data){
         temp->next = head;
         head = temp;
         length++;
-        return;
+        return true;
     }
     // insert at a given position, not first index.
     Node<T>* p = head;
@@ -124,7 +121,23 @@ void LinkedList<T>::insertAt(int index, const T& data){
     temp->next = p->next;
     p->next = temp;
     length++;
+    return true;
+}
 
+template <typename T>
+void LinkedList<T>::push_back(const T& data){
+    Node<T>* newNode = new Node<T>{data, nullptr};
+    if(head == nullptr){
+        head = newNode;
+        length++;
+        return;
+    }
+    Node<T>* p = head;
+    while(p->next != nullptr){
+        p = p->next;
+    }
+    p->next = newNode;
+    length++;
 }
 
 template <typename T>
@@ -133,7 +146,6 @@ T LinkedList<T>::deleteAt(int index){
         std::cout<<"Trying to delete out of range\n";
         return T{};
     }
-
     //first element
     if(index == 0){
         T ret = head->data;
@@ -219,7 +231,104 @@ int LinkedList<T>::getLength(){
     return length;
 }
 
+
+template <typename T>
+T LinkedList<T>::sum(){
+    T sum{}; 
+    Node<T>* p = head;
+    while(p != nullptr){
+        sum = sum + p->data;
+        p = p->next;
+    }
+    return sum;
+}
+
+template <typename T>
+T LinkedList<T>::max(){
+    if(head == nullptr)
+        return T{};
+    
+    T M = head->data;
+    Node<T>* p = head->next;
+    while(p != nullptr){
+        if(p->data > M)
+            M = p->data;
+        p = p->next;
+    }
+    return M;
+}
+
+template <typename T>
+void LinkedList<T>::reverse(){
+    //reverse in-place using 3 sliding pointers
+    //2 is not enough because when you reverse it loses the place of the rest of the linked list.
+    Node<T>* prev = nullptr;
+    Node<T>* curr = head;
+    Node<T>* next = nullptr;
+    while(curr != nullptr){
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    head = prev;
+}
+
+template <typename T>
+void LinkedList<T>::reverseRec(){
+    Node<T>* prev = nullptr;
+    Node<T>* curr = head; 
+    revRec(prev, curr);
+}
+template <typename T>
+void LinkedList<T>::concat(const LinkedList<T>& L){
+    // Create a deep copy of L, then append it to this list.
+    Node<T>* nodeTracker = L.head;// keeps track of list to copys nodes as we make copy of each
+    Node<T>* first = nullptr;//points to first node of the copy list.
+    Node<T>* prev = nullptr;// keeps track of tail of newly created list
+    Node<T>* curr = nullptr;//tracks newly created nodes
+    while(nodeTracker != nullptr){
+        curr = new Node<T>{nodeTracker->data, nullptr};
+        if(first == nullptr){
+            first = curr;
+        }
+        else{
+            prev->next = curr;
+        }
+        prev = curr;
+        nodeTracker = nodeTracker->next;
+    }
+
+    // Nothing to append.
+    if(first == nullptr){
+        return;
+    }
+
+    if(head == nullptr){
+        head = first;
+    }
+    else{
+        Node<T>* tail = head;
+        while(tail->next != nullptr){
+            tail = tail->next;
+        }
+        tail->next = first;
+    }
+
+    length += L.length;
+}
+
+
 //helper funcitons
+template <typename T>
+void LinkedList<T>::revRec(Node<T>* prev, Node<T>* curr){
+    if(curr != nullptr){
+        revRec(curr, curr->next);
+        curr->next = prev;
+    }
+    else
+        head = prev;
+}
 
 template <typename T>
 void LinkedList<T>::recursivePrint(Node<T>* p){
@@ -227,7 +336,6 @@ void LinkedList<T>::recursivePrint(Node<T>* p){
         std::cout<<p->data<<" ";
         recursivePrint(p->next);
     }
-
 }
 
 template <typename T>

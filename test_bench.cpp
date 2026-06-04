@@ -3,7 +3,11 @@
 #include "linked_list.h"
 #include "hash_map_chaining.h"
 #include "hash_map_OA.h"
+#include "stack.h"
+#include <string>
+#include <stdexcept>
 using namespace std;
+
 
 void ArrayListTest(){
     cout << "=== ARRAY LIST TEST BENCH ===" << endl << endl;
@@ -122,7 +126,8 @@ void ArrayListTest(){
     assigned.Display();
     cout << "Original should remain 22 33 44: ";
     original.Display();
-    assigned = assigned;
+    ArrayList& selfRefArray = assigned;
+    assigned = selfRefArray;
     cout << "Assigned after self-assignment should be unchanged: ";
     assigned.Display();
     cout << "Assigned size should still be 3: " << assigned.Size() << endl;
@@ -367,7 +372,8 @@ void LinkedListTest(){
     cout << "Source should remain unchanged (99, 20, 10): ";
     source.print();
 
-    assigned = assigned;
+    LinkedList<int>& selfRefList = assigned;
+    assigned = selfRefList;
     cout << "After self-assignment, assigned should be unchanged: ";
     assigned.print();
     cout << "assigned length should still be 3: " << assigned.getLength() << endl;
@@ -380,6 +386,107 @@ void LinkedListTest(){
     }
     cout << "After scoped destructors, source should still be valid: ";
     source.print();
+    cout << endl;
+
+    // Test 14: Sum and Max
+    cout << "--- Test 14: Sum and Max ---" << endl;
+    LinkedList<int> L8;
+    cout << "Empty list sum() should be 0: " << L8.sum() << endl;
+    cout << "Empty list max() should be 0: " << L8.max() << endl;
+    L8.push_back(15);
+    L8.push_back(5);
+    L8.push_back(25);
+    L8.push_back(10);
+    cout << "List should be 15 5 25 10: ";
+    L8.print();
+    cout << "sum() should be 55: " << L8.sum() << endl;
+    cout << "max() should be 25: " << L8.max() << endl;
+    cout << endl;
+
+    // Test 15: Iterative Reverse
+    cout << "--- Test 15: Iterative Reverse ---" << endl;
+    LinkedList<int> L9;
+    cout << "Reversing empty list should remain empty: ";
+    L9.reverse();
+    L9.print();
+
+    L9.push_back(42);
+    cout << "Single element before reverse: ";
+    L9.print();
+    L9.reverse();
+    cout << "Single element after reverse should still be 42: ";
+    L9.print();
+
+    L9.push_back(84);
+    L9.push_back(126);
+    L9.push_back(168);
+    cout << "Before reverse should be 42 84 126 168: ";
+    L9.print();
+    L9.reverse();
+    cout << "After reverse should be 168 126 84 42: ";
+    L9.print();
+    cout << "Length should still be 4: " << L9.getLength() << endl;
+    cout << endl;
+
+    // Test 16: Recursive Reverse
+    cout << "--- Test 16: Recursive Reverse ---" << endl;
+    LinkedList<int> L10;
+    L10.push_back(1);
+    L10.push_back(2);
+    L10.push_back(3);
+    L10.push_back(4);
+    L10.push_back(5);
+    cout << "Before reverseRec should be 1 2 3 4 5: ";
+    L10.print();
+    L10.reverseRec();
+    cout << "After reverseRec should be 5 4 3 2 1: ";
+    L10.print();
+    L10.reverseRec();
+    cout << "After reverseRec again should be back to 1 2 3 4 5: ";
+    L10.print();
+    cout << "Length should still be 5: " << L10.getLength() << endl;
+    cout << endl;
+
+    // Test 17: Concat
+    cout << "--- Test 17: Concat ---" << endl;
+    LinkedList<int> C1;
+    C1.push_back(1);
+    C1.push_back(2);
+    C1.push_back(3);
+    LinkedList<int> C2;
+    C2.push_back(4);
+    C2.push_back(5);
+    cout << "C1 before concat should be 1 2 3: ";
+    C1.print();
+    cout << "C2 should be 4 5: ";
+    C2.print();
+    C1.concat(C2);
+    cout << "C1 after C1.concat(C2) should be 1 2 3 4 5: ";
+    C1.print();
+    cout << "C1 length should be 5: " << C1.getLength() << endl;
+    cout << "C2 should remain unchanged (deep copy append): ";
+    C2.print();
+    cout << "C2 length should remain 2: " << C2.getLength() << endl;
+
+    LinkedList<int> C3;
+    C3.concat(C2);
+    cout << "Empty C3 after C3.concat(C2) should be 4 5: ";
+    C3.print();
+    cout << "C3 length should be 2: " << C3.getLength() << endl;
+
+    LinkedList<int> C4;
+    C1.concat(C4);
+    cout << "C1 after concat with empty list should stay 1 2 3 4 5: ";
+    C1.print();
+    cout << "C1 length should still be 5: " << C1.getLength() << endl;
+
+    LinkedList<int> C5;
+    C5.push_back(7);
+    C5.push_back(8);
+    C5.concat(C5);
+    cout << "C5 after self concat should be 7 8 7 8: ";
+    C5.print();
+    cout << "C5 length should be 4: " << C5.getLength() << endl;
     cout << endl;
 
     cout << "=== ALL TESTS COMPLETE ===" << endl;
@@ -595,4 +702,258 @@ void HashMapOATest(){
 
     runOATests(false);//linear
     runOATests(true);//quadratic
+}
+
+void StackTest(){
+    cout << "=== STACK COMPREHENSIVE TEST BENCH ===" << endl << endl;
+
+    // Test 1: Empty Stack Operations
+    cout << "--- Test 1: Empty Stack ---" << endl;
+    Stack<int> S1(5);
+    cout << "Stack created with capacity 5" << endl;
+    cout << "isEmpty() should be 1: " << S1.isEmpty() << endl;
+    cout << "isFull() should be 0: " << S1.isFull() << endl;
+    try {
+        cout << "Attempting peek() on empty stack: " << S1.peek() << endl;
+    }
+    catch (const underflow_error& e) {
+        cout << "Attempting peek() on empty stack threw: " << e.what() << endl;
+    }
+    try {
+        cout << "Attempting pop() on empty stack: " << S1.pop() << endl;
+    }
+    catch (const underflow_error& e) {
+        cout << "Attempting pop() on empty stack threw: " << e.what() << endl;
+    }
+    cout << endl;
+
+    // Test 2: Push Operations - Single Element
+    cout << "--- Test 2: Single Element Push ---" << endl;
+    S1.push(10);
+    cout << "Pushed 10" << endl;
+    cout << "isEmpty() should be 0: " << S1.isEmpty() << endl;
+    cout << "peek() should be 10: " << S1.peek() << endl;
+    cout << endl;
+
+    // Test 3: Multiple Push Operations
+    cout << "--- Test 3: Multiple Push Operations ---" << endl;
+    S1.push(20);
+    S1.push(30);
+    S1.push(40);
+    cout << "Pushed 20, 30, 40" << endl;
+    cout << "peek() should be 40: " << S1.peek() << endl;
+    cout << "isFull() should be 0: " << S1.isFull() << endl;
+    cout << endl;
+
+    // Test 4: Fill to Capacity
+    cout << "--- Test 4: Fill to Capacity ---" << endl;
+    S1.push(50);
+    cout << "Pushed 50 (5th element)" << endl;
+    cout << "Stack now: 10, 20, 30, 40, 50" << endl;
+    cout << "isFull() should be 1: " << S1.isFull() << endl;
+    cout << "peek() should be 50: " << S1.peek() << endl;
+    cout << endl;
+
+    // Test 5: Push Beyond Capacity (Dynamic Expansion)
+    cout << "--- Test 5: Dynamic Expansion ---" << endl;
+    S1.push(60);
+    S1.push(70);
+    cout << "Pushed 60, 70 (should trigger expansion)" << endl;
+    cout << "peek() should be 70: " << S1.peek() << endl;
+    cout << "isFull() should be 0: " << S1.isFull() << endl;
+    cout << endl;
+
+    // Test 6: Pop Operations
+    cout << "--- Test 6: Pop Operations ---" << endl;
+    cout << "Popping: " << S1.pop() << " (should be 70)" << endl;
+    cout << "Popping: " << S1.pop() << " (should be 60)" << endl;
+    cout << "peek() should be 50: " << S1.peek() << endl;
+    cout << "Popping: " << S1.pop() << " (should be 50)" << endl;
+    cout << "Popping: " << S1.pop() << " (should be 40)" << endl;
+    cout << "peek() should be 30: " << S1.peek() << endl;
+    cout << endl;
+
+    // Test 7: Pop Until Empty
+    cout << "--- Test 7: Pop Until Empty ---" << endl;
+    cout << "Remaining elements: 10, 20, 30" << endl;
+    cout << "Popping: " << S1.pop() << " (should be 30)" << endl;
+    cout << "Popping: " << S1.pop() << " (should be 20)" << endl;
+    cout << "Popping: " << S1.pop() << " (should be 10)" << endl;
+    cout << "isEmpty() should be 1: " << S1.isEmpty() << endl;
+    try {
+        cout << "Attempting pop() on empty stack: " << S1.pop() << endl;
+    }
+    catch (const underflow_error& e) {
+        cout << "Attempting pop() on empty stack threw: " << e.what() << endl;
+    }
+    cout << endl;
+
+    // Test 8: Push After Emptying
+    cout << "--- Test 8: Push After Emptying ---" << endl;
+    S1.push(100);
+    S1.push(200);
+    cout << "Pushed 100, 200 after emptying" << endl;
+    cout << "peek() should be 200: " << S1.peek() << endl;
+    cout << "isEmpty() should be 0: " << S1.isEmpty() << endl;
+    cout << endl;
+
+    // Test 9: Mixed Operations
+    cout << "--- Test 9: Mixed Push/Pop Operations ---" << endl;
+    S1.push(300);
+    cout << "Pushed 300, peek(): " << S1.peek() << endl;
+    cout << "Popping: " << S1.pop() << endl;
+    S1.push(400);
+    S1.push(500);
+    cout << "Pushed 400, 500" << endl;
+    cout << "peek() should be 500: " << S1.peek() << endl;
+    cout << "Popping: " << S1.pop() << " (should be 500)" << endl;
+    cout << "Popping: " << S1.pop() << " (should be 400)" << endl;
+    cout << "peek() should be 200: " << S1.peek() << endl;
+    cout << endl;
+
+    // Test 10: Large Capacity Stack
+    cout << "--- Test 10: Large Capacity Stack ---" << endl;
+    Stack<int> S2(3);
+    cout << "Created stack with capacity 3" << endl;
+    S2.push(1);
+    S2.push(2);
+    S2.push(3);
+    cout << "Pushed 1, 2, 3 - isFull(): " << S2.isFull() << endl;
+    S2.push(4);
+    S2.push(5);
+    S2.push(6);
+    S2.push(7);
+    S2.push(8);
+    cout << "Pushed 5 more elements (4-8)" << endl;
+    cout << "peek() should be 8: " << S2.peek() << endl;
+    for(int i = 0; i < 8; i++) {
+        cout << "Pop " << (i+1) << ": " << S2.pop() << endl;
+    }
+    cout << "isEmpty() should be 1: " << S2.isEmpty() << endl;
+    cout << endl;
+
+
+    // Copy Constructor Tests
+    cout << "\n--- Test 11: Copy Empty Stack ---" << endl;
+    {
+        Stack<int> A(5);
+        Stack<int> B(A);
+        cout << "Original isEmpty(): " << A.isEmpty() << endl;
+        cout << "Copy isEmpty(): " << B.isEmpty() << endl;
+    }
+    cout << endl;
+
+    cout << "--- Test 12: Copy Stack with Elements ---" << endl;
+    {
+        Stack<int> A(5);
+        A.push(100); A.push(200); A.push(300);
+        Stack<int> B(A);
+        cout << "Original peek() should be 300: " << A.peek() << endl;
+        cout << "Copy peek() should be 300: " << B.peek() << endl;
+        A.push(400);
+        cout << "After pushing 400 to original, original peek() should be 400: " << A.peek() << endl;
+        cout << "Copy peek() should still be 300: " << B.peek() << endl;
+        B.pop();
+        cout << "After popping copy, copy peek() should be 200: " << B.peek() << endl;
+        cout << "Original peek() should still be 400: " << A.peek() << endl;
+    }
+    cout << endl;
+
+    cout << "--- Test 13: Copy Full Stack ---" << endl;
+    {
+        Stack<int> A(3);
+        A.push(10); A.push(20); A.push(30);
+        Stack<int> B(A);
+        cout << "Original isFull() should be 1: " << A.isFull() << endl;
+        cout << "Copy isFull() should be 1: " << B.isFull() << endl;
+        cout << "Copy peek() should be 30: " << B.peek() << endl;
+    }
+    cout << endl;
+
+    // Copy Assignment Tests
+    cout << "--- Test 14: Assign Empty to Empty ---" << endl;
+    {
+        Stack<int> A(5), B(10);
+        B = A;
+        cout << "After assignment, B isEmpty() should be 1: " << B.isEmpty() << endl;
+    }
+    cout << endl;
+
+    cout << "--- Test 15: Assign Non-Empty, Deep Copy Verification ---" << endl;
+    {
+        Stack<int> A(5);
+        A.push(1); A.push(2); A.push(3);
+        Stack<int> B(5);
+        B = A;
+        cout << "B peek() should be 3: " << B.peek() << endl;
+        A.push(4);
+        cout << "After pushing 4 to A, A peek() should be 4: " << A.peek() << endl;
+        cout << "B peek() should still be 3: " << B.peek() << endl;
+        B.pop();
+        cout << "After popping B, B peek() should be 2: " << B.peek() << endl;
+        cout << "A peek() should still be 4: " << A.peek() << endl;
+    }
+    cout << endl;
+
+    cout << "--- Test 16: Self-Assignment ---" << endl;
+    {
+        Stack<int> A(5);
+        A.push(100); A.push(200);
+        A = A;
+        cout << "After self-assignment, peek() should be 200: " << A.peek() << endl;
+    }
+    cout << endl;
+
+    cout << "--- Test 17: Chain Assignment ---" << endl;
+    {
+        Stack<int> A(5), B(5), C(5);
+        A.push(999);
+        C = B = A;
+        cout << "A peek() should be 999: " << A.peek() << endl;
+        cout << "B peek() should be 999: " << B.peek() << endl;
+        cout << "C peek() should be 999: " << C.peek() << endl;
+    }
+    cout << endl;
+
+    // Destructor Tests
+    cout << "--- Test 18: Destructor on Empty Stack ---" << endl;
+    {
+        Stack<int> A(5);
+        cout << "Empty stack created in scope" << endl;
+    }
+    cout << "Stack destroyed (scope ended)" << endl;
+    cout << endl;
+
+    cout << "--- Test 19: Destructor on Stack with Elements ---" << endl;
+    {
+        Stack<int> A(5);
+        A.push(10); A.push(20); A.push(30);
+        cout << "peek(): " << A.peek() << endl;
+    }
+    cout << "Stack destroyed (scope ended)" << endl;
+    cout << endl;
+
+    cout << "--- Test 20: Destructor on Expanded Stack ---" << endl;
+    {
+        Stack<int> A(3);
+        A.push(1); A.push(2); A.push(3); A.push(4); A.push(5);
+        cout << "peek(): " << A.peek() << endl;
+    }
+    cout << "Expanded stack destroyed (scope ended)" << endl;
+    cout << endl;
+
+    cout << "--- Test 21: Generic Type Support (string) ---" << endl;
+    {
+        Stack<string> words(2);
+        words.push("alpha");
+        words.push("beta");
+        words.push("gamma");
+        cout << "Top string should be gamma: " << words.peek() << endl;
+        cout << "Pop should return gamma: " << words.pop() << endl;
+        cout << "Next top should be beta: " << words.peek() << endl;
+        cout << "Current size should be 2: " << words.size() << endl;
+    }
+    cout << endl;
+
+    cout << "=== ALL TESTS COMPLETE ===" << endl;
 }

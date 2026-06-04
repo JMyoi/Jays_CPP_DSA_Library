@@ -137,7 +137,7 @@ void HashMapOA<T>::rehash(){
     HashTable.resize(capacity);
     size = 0;
     //for every element in the old table, if there is a occupied then insert that key into our HashTable, 
-    for(int i = 0; i<oldTable.size(); i++){
+    for(size_t i = 0; i < oldTable.size(); i++){
         if (oldTable.at(i).status == Status::occupied)
             insert(oldTable.at(i).key, oldTable.at(i).value);
     }
