@@ -1,8 +1,28 @@
-# VS Code settings
+# macOS
+.DS_Store
+
+# Visual Studio
+.vs/
+
+# VS Code
 .vscode/
 
 # Build directories
 build/
 
+# Compiled object files & debug symbols
+*.o
+*.obj
+*.dSYM/
+
 # Executables
-main.exe
+*.exe
+a.out
+main
+
+# Classwork executables (no extension)
+Classwork/dict_test
+Classwork/list
+Classwork/main
+Classwork/monte_carlo
+Classwork/stack
