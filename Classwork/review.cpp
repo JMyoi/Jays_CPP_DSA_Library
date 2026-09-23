@@ -1,53 +1,60 @@
 #include <iostream>
 using namespace std;
 
-class Node {
-	public:
-		Node(int value = 0) {
-			numVal = value;
-		}
-		~Node() {
-			cout << numVal << endl;
-		}
-		int numVal;
-		Node* next;
-};
-//linked list has a head value which points to the chain of values.
-class LinkedList {
+class MyClass {
 public:
-	LinkedList();
-	~LinkedList();
-	void Prepend(int dataValue);
+	MyClass();
+	MyClass(const MyClass& origObject);
+	MyClass& operator=(const MyClass& objToCopy);
+	~MyClass();
 
-	Node* head;
+	void SetDataObject(const int setVal) { *dataObject = setVal; }
+	int GetDataObject() const { return *dataObject; }
+
+private:
+	int* dataObject;
 };
-
-LinkedList::LinkedList() {
-	head = nullptr;
+//default constructor
+MyClass::MyClass() {
+	dataObject = new int;
+	*dataObject = 0;
 }
-
-LinkedList::~LinkedList() {
-	while (head) { // while head is not nullptr and points to another node
-		Node* next = head->next;
-		delete head;
-		head = next;
+//copy constructor
+MyClass::MyClass(const MyClass& origObject) {
+	cout << "Copy Constructor Called" << endl;
+	dataObject = new int;
+	*dataObject = *(origObject.dataObject);
+}
+//copy Assignment
+MyClass& MyClass::operator=(const MyClass& objToCopy) {
+	cout << "Assignment operator called.\n";
+	if (this != &objToCopy) { // don't self assign
+		delete dataObject; // delete old dynamic data to make space for copy
+		dataObject = new int; // allocate new dynamic memory
+		*dataObject = *(objToCopy.dataObject); // copy dataObject
 	}
-	cout << "Destructor for link list completed\n";
+	return *this; 
+}
+//destructor
+MyClass::~MyClass() {
+	delete dataObject;
 }
 
-void LinkedList::Prepend(int dataValue) {
-	Node* newNode = new Node(dataValue);
-	newNode->next = head;
-	head = newNode;
+void foo(MyClass localObj) {
+	localObj.SetDataObject(68);
 }
+
 int main() {
-	LinkedList* list = new LinkedList();
-	list->Prepend(7);
-	list->Prepend(6);
-	list->Prepend(3);
-	list->Prepend(1);
+	MyClass a;
+	MyClass b;
 
-	delete list;
+	a.SetDataObject(6);
+	//copy class object using copy assignment operator
+	b = a;
+
+	b.SetDataObject(7);
+	cout << "a: " << a.GetDataObject() << endl;
+	cout << "b: " << b.GetDataObject() << endl;
 
 	return 0;
 }

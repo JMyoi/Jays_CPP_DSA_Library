@@ -50,7 +50,7 @@ void ArrayList::Append(int x){
         arr = temp;
         capacity = newCapacity;
     }
-    arr[size++] = x;
+    arr[size++] = x; // post incriment does the assignment operation first then incriments
 }
 
 
@@ -61,7 +61,7 @@ bool ArrayList::Insert(int index, int x){
         return false;
     }
     if(size == capacity){ // reallocate bigger size
-        capacity = (capacity == 0)? 1 : capacity*2;
+        capacity = (capacity == 0) ? 1 : capacity * 2;
         int* temp = new int[capacity];
         for(int i = 0; i<size; i++){// copy over old to new
             temp[i] = arr[i];
@@ -69,7 +69,7 @@ bool ArrayList::Insert(int index, int x){
         delete[] arr;
         arr = temp;
     }
-    //shift items to right ot make space for new element
+    //shift items to right to make space for new element
     for(int i = size; i > index; i--){
         arr[i] = arr[i-1];
     }
