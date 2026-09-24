@@ -14,71 +14,71 @@ void ArrayListTest(){
 
     cout << "--- Test 1: Default Construction ---" << endl;
     ArrayList list;
-    cout << "Size should be 0: " << list.Size() << endl;
-    cout << "Capacity should be 10: " << list.Capacity() << endl;
-    cout << "Display() should show nothing: ";
-    list.Display();
+    cout << "Size should be 0: " << list.getSize() << endl;
+    cout << "Capacity should be 10: " << list.getCapacity() << endl;
+    cout << "display() should show nothing: ";
+    list.display();
     cout << endl;
 
     cout << "--- Test 2: Append Within Capacity ---" << endl;
     for (int value = 1; value <= 5; value++) {
-        list.Append(value * 10);
+        list.append(value * 10);
     }
     cout << "List should be 10 20 30 40 50: ";
-    list.Display();
-    cout << "Size should be 5: " << list.Size() << endl;
-    cout << "Capacity should still be 10: " << list.Capacity() << endl;
-    cout << "Get(2) should succeed with 30: ";
+    list.display();
+    cout << "Size should be 5: " << list.getSize() << endl;
+    cout << "Capacity should still be 10: " << list.getCapacity() << endl;
+    cout << "get(2) should succeed with 30: ";
     int out = -1;
-    if (list.Get(2, out)) cout << out << endl;
+    if (list.get(2, out)) cout << out << endl;
     else cout << "failed" << endl;
     cout << endl;
 
     cout << "--- Test 3: Append Past Capacity ---" << endl;
     for (int value = 6; value <= 12; value++) {
-        list.Append(value * 10);
+        list.append(value * 10);
     }
     cout << "List should be 10 through 120 in steps of 10: ";
-    list.Display();
-    cout << "Size should be 12: " << list.Size() << endl;
-    cout << "Capacity should have grown: " << list.Capacity() << endl;
-    cout << "LinearSearch(70) should be 6: " << list.LinearSearch(70) << endl;
-    cout << "LinearSearch(999) should be -1: " << list.LinearSearch(999) << endl;
+    list.display();
+    cout << "Size should be 12: " << list.getSize() << endl;
+    cout << "Capacity should have grown: " << list.getCapacity() << endl;
+    cout << "linearSearch(70) should be 6: " << list.linearSearch(70) << endl;
+    cout << "linearSearch(999) should be -1: " << list.linearSearch(999) << endl;
     cout << endl;
 
     cout << "--- Test 4: Insert Valid Positions ---" << endl;
     ArrayList insertList(4);
-    cout << "Insert into empty list at index 0: " << insertList.Insert(0, 100) << endl;
-    cout << "Insert at end (index == size): " << insertList.Insert(1, 200) << endl;
-    cout << "Insert in middle: " << insertList.Insert(1, 150) << endl;
+    cout << "Insert into empty list at index 0: " << insertList.insert(0, 100) << endl;
+    cout << "Insert at end (index == size): " << insertList.insert(1, 200) << endl;
+    cout << "Insert in middle: " << insertList.insert(1, 150) << endl;
     cout << "Current list should be 100 150 200: ";
-    insertList.Display();
-    cout << "Size should be 3: " << insertList.Size() << endl;
+    insertList.display();
+    cout << "Size should be 3: " << insertList.getSize() << endl;
     cout << endl;
 
     cout << "--- Test 5: Insert Invalid Positions ---" << endl;
-    cout << "Insert at negative index should fail: " << insertList.Insert(-1, 5) << endl;
-    cout << "Insert past end should fail: " << insertList.Insert(10, 5) << endl;
+    cout << "Insert at negative index should fail: " << insertList.insert(-1, 5) << endl;
+    cout << "Insert past end should fail: " << insertList.insert(10, 5) << endl;
     cout << endl;
 
     cout << "--- Test 6: Delete Operations ---" << endl;
-    insertList.Delete(1);
-    cout << "After Delete(1), list should be 100 200: ";
-    insertList.Display();
-    insertList.Delete(0);
-    cout << "After Delete(0), list should be 200: ";
-    insertList.Display();
-    insertList.Delete(0);
-    cout << "After Delete(0), list should be empty: ";
-    insertList.Display();
+    insertList.deleteAt(1);
+    cout << "After deleteAt(1), list should be 100 200: ";
+    insertList.display();
+    insertList.deleteAt(0);
+    cout << "After deleteAt(0), list should be 200: ";
+    insertList.display();
+    insertList.deleteAt(0);
+    cout << "After deleteAt(0), list should be empty: ";
+    insertList.display();
     cout << endl;
 
     cout << "--- Test 7: Bounds Safety ---" << endl;
-    cout << "Get(0) on empty list should fail: ";
-    if (insertList.Get(0, out)) cout << out << endl;
+    cout << "get(0) on empty list should fail: ";
+    if (insertList.get(0, out)) cout << out << endl;
     else cout << "failed" << endl;
-    cout << "Get(-1) should fail: ";
-    if (insertList.Get(-1, out)) cout << out << endl;
+    cout << "get(-1) should fail: ";
+    if (insertList.get(-1, out)) cout << out << endl;
     else cout << "failed" << endl;
     cout << endl;
 
@@ -94,52 +94,52 @@ void ArrayListTest(){
 
     cout << "--- Test 9: Copy Constructor Deep Copy ---" << endl;
     ArrayList original;
-    original.Append(11);
-    original.Append(22);
-    original.Append(33);
+    original.append(11);
+    original.append(22);
+    original.append(33);
     ArrayList copied(original);
     cout << "Original should be 11 22 33: ";
-    original.Display();
+    original.display();
     cout << "Copied should be 11 22 33: ";
-    copied.Display();
-    original.Delete(0); // mutate source after copy
-    original.Append(44);
+    copied.display();
+    original.deleteAt(0); // mutate source after copy
+    original.append(44);
     cout << "Original after mutation should be 22 33 44: ";
-    original.Display();
+    original.display();
     cout << "Copied should remain 11 22 33: ";
-    copied.Display();
-    cout << "Copied size should be 3: " << copied.Size() << endl;
+    copied.display();
+    cout << "Copied size should be 3: " << copied.getSize() << endl;
     cout << endl;
 
     cout << "--- Test 10: Copy Assignment Deep Copy + Self-Assignment ---" << endl;
     ArrayList assigned;
-    assigned.Append(1);
-    assigned.Append(2);
+    assigned.append(1);
+    assigned.append(2);
     cout << "Assigned before copy (should be 1 2): ";
-    assigned.Display();
+    assigned.display();
     assigned = original;
     cout << "Assigned after assigned = original (should be 22 33 44): ";
-    assigned.Display();
-    assigned.Delete(1);
-    assigned.Append(55);
+    assigned.display();
+    assigned.deleteAt(1);
+    assigned.append(55);
     cout << "Assigned after mutation should be 22 44 55: ";
-    assigned.Display();
+    assigned.display();
     cout << "Original should remain 22 33 44: ";
-    original.Display();
+    original.display();
     ArrayList& selfRefArray = assigned;
     assigned = selfRefArray;
     cout << "Assigned after self-assignment should be unchanged: ";
-    assigned.Display();
-    cout << "Assigned size should still be 3: " << assigned.Size() << endl;
+    assigned.display();
+    cout << "Assigned size should still be 3: " << assigned.getSize() << endl;
     cout << endl;
 
     cout << "--- Test 11: Binary Search (Recursive + Iterative) ---" << endl;
     ArrayList sorted;
     for (int value = 10; value <= 100; value += 10) {
-        sorted.Append(value);
+        sorted.append(value);
     }
     cout << "Sorted list should be 10 20 30 40 50 60 70 80 90 100: ";
-    sorted.Display();
+    sorted.display();
     cout << "binarySearch(10, true) should be 0: " << sorted.binarySearch(10, true) << endl;
     cout << "binarySearch(70, true) should be 6: " << sorted.binarySearch(70, true) << endl;
     cout << "binarySearch(100, true) should be 9: " << sorted.binarySearch(100, true) << endl;
@@ -153,6 +153,90 @@ void ArrayListTest(){
     cout << "binarySearch on empty list should be -1: "
          << emptySorted.binarySearch(10, true) << ", "
          << emptySorted.binarySearch(10, false) << endl;
+    cout << endl;
+
+    cout << "--- Test 12: Remove By Value ---" << endl;
+    ArrayList removeList;
+    removeList.append(5);
+    removeList.append(7);
+    removeList.append(5);
+    removeList.append(9);
+    removeList.append(3);
+    cout << "Starting list should be 5 7 5 9 3: ";
+    removeList.display();
+    cout << "remove(5) should succeed (1): " << removeList.remove(5) << endl;
+    cout << "Only first 5 removed, list should be 7 5 9 3: ";
+    removeList.display();
+    cout << "remove(3) at tail should succeed (1): " << removeList.remove(3) << endl;
+    cout << "List should be 7 5 9: ";
+    removeList.display();
+    cout << "remove(7) at head should succeed (1): " << removeList.remove(7) << endl;
+    cout << "List should be 5 9: ";
+    removeList.display();
+    cout << "remove(42) not in list should fail (0): " << removeList.remove(42) << endl;
+    cout << "List should be unchanged 5 9: ";
+    removeList.display();
+    cout << "Size should be 2: " << removeList.getSize() << endl;
+    removeList.remove(5);
+    removeList.remove(9);
+    cout << "After removing all, list should be empty: ";
+    removeList.display();
+    cout << "Size should be 0: " << removeList.getSize() << endl;
+    cout << "remove(5) on empty list should fail (0): " << removeList.remove(5) << endl;
+    cout << endl;
+
+    cout << "--- Test 13: Comparison Operators == and != ---" << endl;
+    ArrayList cmpA(3);
+    ArrayList cmpB(20);
+    for (int value = 1; value <= 3; value++) {
+        cmpA.append(value);
+        cmpB.append(value);
+    }
+    cout << "cmpA should be 1 2 3: ";
+    cmpA.display();
+    cout << "cmpB should be 1 2 3: ";
+    cmpB.display();
+    cout << "Same elements, different capacity: cmpA == cmpB should be 1: " << (cmpA == cmpB) << endl;
+    cout << "cmpA != cmpB should be 0: " << (cmpA != cmpB) << endl;
+
+    ArrayList cmpShort;
+    cmpShort.append(1);
+    cmpShort.append(2);
+    cout << "Different sizes (1 2 3 vs 1 2): cmpA == cmpShort should be 0: " << (cmpA == cmpShort) << endl;
+    cout << "cmpA != cmpShort should be 1: " << (cmpA != cmpShort) << endl;
+
+    ArrayList cmpDiff;
+    cmpDiff.append(1);
+    cmpDiff.append(9);
+    cmpDiff.append(3);
+    cout << "Same size, one element differs (1 2 3 vs 1 9 3): cmpA == cmpDiff should be 0: " << (cmpA == cmpDiff) << endl;
+    cout << "cmpA != cmpDiff should be 1: " << (cmpA != cmpDiff) << endl;
+
+    ArrayList cmpReordered;
+    cmpReordered.append(3);
+    cmpReordered.append(2);
+    cmpReordered.append(1);
+    cout << "Same elements, different order (1 2 3 vs 3 2 1): cmpA == cmpReordered should be 0: " << (cmpA == cmpReordered) << endl;
+
+    ArrayList emptyA;
+    ArrayList emptyB(50);
+    cout << "Two empty lists: emptyA == emptyB should be 1: " << (emptyA == emptyB) << endl;
+    cout << "emptyA != emptyB should be 0: " << (emptyA != emptyB) << endl;
+    cout << "Empty vs non-empty: emptyA == cmpA should be 0: " << (emptyA == cmpA) << endl;
+
+    cout << "Self comparison: cmpA == cmpA should be 1: " << (cmpA == cmpA) << endl;
+    cout << "cmpA != cmpA should be 0: " << (cmpA != cmpA) << endl;
+
+    ArrayList cmpCopy(cmpA);
+    cout << "Copy-constructed list: cmpCopy == cmpA should be 1: " << (cmpCopy == cmpA) << endl;
+    cmpCopy.append(4);
+    cout << "After cmpCopy.append(4): cmpCopy == cmpA should be 0: " << (cmpCopy == cmpA) << endl;
+    cmpCopy.remove(4);
+    cout << "After cmpCopy.remove(4): cmpCopy == cmpA should be 1 again: " << (cmpCopy == cmpA) << endl;
+
+    const ArrayList& constRefA = cmpA;
+    const ArrayList& constRefB = cmpB;
+    cout << "Through const references: constRefA == constRefB should be 1: " << (constRefA == constRefB) << endl;
     cout << endl;
 
     cout << "=== ARRAY LIST TEST COMPLETE ===" << endl;
