@@ -4,13 +4,13 @@
 using namespace std;
 
 
-int NaturalNumberSum(int n){
+inline int NaturalNumberSum(int n){
     if(n > 0)
         return NaturalNumberSum(n-1) + n;
     return 0;
 }
 
-int NaturalNumberSumIterative(int n){
+inline int NaturalNumberSumIterative(int n){
     int sum = 0;
     for(int i = 1; i <= n; ++i){
         sum += i;
@@ -18,13 +18,13 @@ int NaturalNumberSumIterative(int n){
     return sum;
 }
 
-int Factorial(int n){
+inline int Factorial(int n){
     if(n == 0)
         return 1;
     return Factorial(n-1) * n;
 }
 
-int FactorialIterative(int n){
+inline int FactorialIterative(int n){
     int result = 1;
     for(int i = 2; i <= n; ++i){
         result *= i;
@@ -32,13 +32,13 @@ int FactorialIterative(int n){
     return result;
 }
 
-int exponent(int m, int n){
+inline int exponent(int m, int n){
     if(n <= 0)
         return 1;
     return exponent(m, n-1) * m;
 }
 
-int exponentIterative(int m, int n){
+inline int exponentIterative(int m, int n){
     int result = 1;
     for(int i = 0; i < n; ++i){
         result *= m;
@@ -47,7 +47,7 @@ int exponentIterative(int m, int n){
 }
 
 
-int fibonacci(int n){
+inline int fibonacci(int n){
     if(n == 0)
         return 0;
     if(n == 1)
@@ -55,15 +55,15 @@ int fibonacci(int n){
     return fibonacci(n-1) + fibonacci(n-2);
 }
 //key = n, value = value at fib(n)
-unordered_map<int, long long> M;
-long long fibMemoization(int n){
+inline unordered_map<int, long long> M; // inline (C++17) so every .cpp shares one M instead of each defining its own
+inline long long fibMemoization(int n){
     if(n <= 1)
         return n;
     if(M.count(n)) return M[n];
     return M[n] = fibMemoization(n-1) + fibMemoization(n-2);
 }
 
-int fib(int n){
+inline int fib(int n){
     if(n <=1 )
         return n;
     int t0 = 0;
@@ -98,13 +98,13 @@ class Time{
         bool operator==(Time rhs) const ;
 } ;
 
-Time Time::operator+(Time rhs) const{
+inline Time Time::operator+(Time rhs) const{
     Time timeTotal;
     timeTotal.hours = hours + rhs.hours;
     timeTotal.minutes = minutes + rhs.minutes;
     return timeTotal;
 }
-bool Time::operator==(Time rhs) const {
+inline bool Time::operator==(Time rhs) const {
     return (hours == rhs.hours) && (minutes == rhs.minutes);
 }
 
@@ -115,7 +115,7 @@ class NegativeValueException{
 }; 
 
 // Function that throws the custom exception
-void checkValue(int x) {
+inline void checkValue(int x) {
     if (x < 0) {
         throw NegativeValueException();
     }
