@@ -1,5 +1,5 @@
 /*
-
+TODO: change resize at load factor 1 instead of 0.75
 Implement the Unordered_Map,
 
 Stores Key value pairs
