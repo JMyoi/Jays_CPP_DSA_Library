@@ -2,12 +2,10 @@
 #include "hash_map_OA.h"
 #include <iostream>
 #include <vector>
-#include <cmath>
 using namespace std;
 
 template <typename T>
-HashMapOA<T>::HashMapOA(bool probeType){
-    this->probeType = probeType;
+HashMapOA<T>::HashMapOA(){
     HashTable.resize(23);
     size = 0;
     capacity = 23;
@@ -22,10 +20,8 @@ bool HashMapOA<T>::insert(int key, const T& value){
     int firstDeleted = -1;
 
     for (int i = 0; i < capacity; i++) {
-        //depending on probe type, do linear or quadratic hash
-        int index = (probeType) 
-            ? (computeHash(key) + (int)pow(i, 2)) % capacity
-            : computeHash(key + i); 
+        //linear probing: check the next slot over each iteration
+        int index = (computeHash(key) + i) % capacity;
 
         if (HashTable.at(index).status == Status::occupied) {
             if (HashTable.at(index).key == key) {
@@ -58,14 +54,11 @@ bool HashMapOA<T>::insert(int key, const T& value){
 }
 
 template <typename T>
-bool HashMapOA<T>::get(int key, T& value){
+bool HashMapOA<T>::get(int key, T& value) const{
 
-    
     //if a state is deleted it does not mean it is not found, it could still be found in further indices, but if it is empty then it is definitly not found later
     for (int i = 0; i < capacity; i++) {
-        int index = (probeType) 
-                ? (computeHash(key) + (int)pow(i, 2)) % capacity
-                : computeHash(key + i); 
+        int index = (computeHash(key) + i) % capacity; // start at home then incriment by 1, linear probe, wa have to % capacity to wrap back around if it exceeds capacity.
         if (HashTable.at(index).status == Status::empty) {
             return false;
         }
@@ -82,12 +75,11 @@ template <typename T>
 bool HashMapOA<T>::remove(int key){
     
     for(int i = 0; i< capacity; i++){
-        int index = (probeType) 
-                ? (computeHash(key) + (int)pow(i, 2)) % capacity
-                : computeHash(key + i); 
+        int index = (computeHash(key) + i) % capacity;
         if(HashTable.at(index).status == Status::empty)
             return false;
         if(HashTable.at(index).status == Status::occupied && HashTable.at(index).key == key){
+            HashTable.at(index).value = T{};    // release the old value's resources, because T might be of a large object
             HashTable.at(index).status = Status::deleted;
             size--;
             return true;
@@ -97,7 +89,7 @@ bool HashMapOA<T>::remove(int key){
 }
 
 template <typename T>
-void HashMapOA<T>::print(){
+void HashMapOA<T>::print() const {
     for(int i = 0; i< capacity; i++){
         cout<<i;
         if(HashTable.at(i).status == Status::occupied)
@@ -116,14 +108,15 @@ void HashMapOA<T>::clear(){
 
 
 template <typename T>
-double HashMapOA<T>::getLoadFactor(){
+double HashMapOA<T>::getLoadFactor() const {
     return static_cast<double>(size) / static_cast<double>(capacity);
 }
 
 
 template <typename T>
-int HashMapOA<T>::computeHash(int key){
-    return ((key % capacity) + capacity) % capacity; // modulo normalization to handle negative keys
+int HashMapOA<T>::computeHash(int key) const {
+    // modulo normalization to handle negative keys
+    return ((key % capacity) + capacity) % capacity; 
 }
 
 
