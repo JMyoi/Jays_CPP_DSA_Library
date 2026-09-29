@@ -22,14 +22,12 @@ Stack<T>::~Stack(){
 //copy constructor
 template <typename T>
 Stack<T>::Stack(const Stack& origStack){
-
-    cout<<"copy constructor called.\n";
     capacity = origStack.capacity;
     top = origStack.top;
     //initialize it's own array in heap
     array = new T[origStack.capacity];
     // copy elements from original stack to the copy
-    for(int i = 0; i<top+1; i++){
+    for(int i = 0; i < top + 1; i++){
         array[i] = origStack.array[i];
     }
 }
@@ -42,7 +40,7 @@ Stack<T>& Stack<T>::operator=(const Stack& stackToCopy){
         top = stackToCopy.top;
         delete []array;
         array = new T[capacity];
-        for(int i = 0; i < top+1; i++){
+        for(int i = 0; i < top + 1; i++){
             array[i] = stackToCopy.array[i];
         }
     }
@@ -58,7 +56,7 @@ void Stack<T>::push(const T& data){
     else{// allocate new sized array x2.
         int newCapacity = capacity * 2;
         T* temp = new T[newCapacity];
-        for(int i = 0; i <= top; i++){
+        for(int i = 0; i < top + 1; i++){
             temp[i] = array[i];
         }
         delete[] array;
@@ -75,7 +73,7 @@ T Stack<T>::pop(){
         throw underflow_error("Stack is empty");
     }
     else{
-        return array[top--];
+        return array[top--]; //  post decrement, returns first then decrements
     }
 }
 
@@ -89,14 +87,8 @@ const T& Stack<T>::peek() const{
     }
 } 
 
-template <typename T>
-bool Stack<T>::isEmpty() const{
-    return top == -1;
-}
 
-template <typename T>
-bool Stack<T>::isFull() const{
-    return capacity-1 == top;
-}
+
+
 
 
