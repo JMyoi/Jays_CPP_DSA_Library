@@ -24,10 +24,7 @@ void ArrayListTest(){
     list.display();
     cout << "Size should be 5: " << list.getSize() << endl;
     cout << "Capacity should still be 5: " << list.getCapacity() << endl;
-    cout << "get(2) should succeed with 30: ";
-    int out = -1;
-    if (list.get(2, out)) cout << out << endl;
-    else cout << "failed" << endl;
+    cout << "get(2) should be 30: " << list.get(2) << endl;
     cout << endl;
 
     cout << "--- Test 3: Append Past Capacity ---" << endl;
@@ -44,17 +41,32 @@ void ArrayListTest(){
 
     cout << "--- Test 4: Insert Valid Positions ---" << endl;
     ArrayList<int> insertList(4);
-    cout << "Insert into empty list at index 0: " << insertList.insert(0, 100) << endl;
-    cout << "Insert at end (index == size): " << insertList.insert(1, 200) << endl;
-    cout << "Insert in middle: " << insertList.insert(1, 150) << endl;
+    insertList.insert(0, 100); // into empty list
+    insertList.insert(1, 200); // at end (index == size)
+    insertList.insert(1, 150); // in middle
+    cout << "Inserted 100 at 0, 200 at 1, 150 at 1" << endl;
     cout << "Current list should be 100 150 200: ";
     insertList.display();
     cout << "Size should be 3: " << insertList.getSize() << endl;
     cout << endl;
 
     cout << "--- Test 5: Insert Invalid Positions ---" << endl;
-    cout << "Insert at negative index should fail: " << insertList.insert(-1, 5) << endl;
-    cout << "Insert past end should fail: " << insertList.insert(10, 5) << endl;
+    try {
+        insertList.insert(-1, 5);
+        cout << "Insert at negative index unexpectedly succeeded" << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "Insert at negative index threw as expected: " << e.what() << endl;
+    }
+    try {
+        insertList.insert(10, 5);
+        cout << "Insert past end unexpectedly succeeded" << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "Insert past end threw as expected: " << e.what() << endl;
+    }
+    cout << "List should be unchanged, 100 150 200: ";
+    insertList.display();
     cout << endl;
 
     cout << "--- Test 6: Delete Operations ---" << endl;
@@ -70,12 +82,25 @@ void ArrayListTest(){
     cout << endl;
 
     cout << "--- Test 7: Bounds Safety ---" << endl;
-    cout << "get(0) on empty list should fail: ";
-    if (insertList.get(0, out)) cout << out << endl;
-    else cout << "failed" << endl;
-    cout << "get(-1) should fail: ";
-    if (insertList.get(-1, out)) cout << out << endl;
-    else cout << "failed" << endl;
+    try {
+        cout << "get(0) on empty list: " << insertList.get(0) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
+    try {
+        cout << "get(-1): " << insertList.get(-1) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
+    try {
+        insertList.deleteAt(0);
+        cout << "deleteAt(0) on empty list unexpectedly succeeded" << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "deleteAt(0) on empty list threw as expected: " << e.what() << endl;
+    }
     cout << endl;
 
     cout << "--- Test 8: Negative Capacity Rejection ---" << endl;
@@ -244,10 +269,7 @@ void ArrayListTest(){
     cout << "List should be apple avocado banana cherry: ";
     words.display();
     cout << "Size should be 4: " << words.getSize() << endl;
-    string word;
-    cout << "get(3) should be cherry: ";
-    if (words.get(3, word)) cout << word << endl;
-    else cout << "failed" << endl;
+    cout << "get(3) should be cherry: " << words.get(3) << endl;
     cout << "linearSearch(\"banana\") should be 2: " << words.linearSearch("banana") << endl;
     cout << "binarySearch(\"cherry\", true) should be 3: " << words.binarySearch("cherry", true) << endl;
     cout << "binarySearch(\"blueberry\", false) should be -1: " << words.binarySearch("blueberry", false) << endl;
@@ -260,6 +282,20 @@ void ArrayListTest(){
     cout << "After deleteAt(0) on copy, copy != original should be 1: " << (wordsCopy != words) << endl;
     cout << "Original should remain apple avocado cherry: ";
     words.display();
+    cout << endl;
+
+    cout << "--- Test 15: Passing In Its Own Element ---" << endl;
+    ArrayList<string> self(2);
+    self.append("first");
+    self.append("second"); // list is now full
+    self.append(self.get(0)); // resize while argument refers to old array
+    cout << "After append(get(0)) with resize, list should be first second first: ";
+    self.display();
+    self.insert(0, self.get(1)); // shift overwrites the slot the argument refers to
+    cout << "After insert(0, get(1)), list should be second first second first: ";
+    self.display();
+    self.get(0) = "changed"; // non-const get() returns a reference
+    cout << "After get(0) = \"changed\", get(0) should be changed: " << self.get(0) << endl;
     cout << endl;
 
     cout << "=== ARRAY LIST TEST COMPLETE ===" << endl;

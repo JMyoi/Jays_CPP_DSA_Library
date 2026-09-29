@@ -30,19 +30,22 @@ ArrayList<T>::ArrayList(const ArrayList& origList){
 template <typename T>
 ArrayList<T>& ArrayList<T>::operator=(const ArrayList& listToCopy){
     if(this != &listToCopy){
+        // allocate and copy first, so if new throws this list is left unchanged
+        T* newArr = new T[listToCopy.capacity];
+        for(int i = 0; i<listToCopy.size; i++){
+            newArr[i] = listToCopy.arr[i];
+        }
+        delete[] arr;
+        arr = newArr;
         capacity = listToCopy.capacity;
         size = listToCopy.size;
-        delete[] arr;
-        arr = new T[capacity];
-        for(int i = 0; i<size; i++){
-            arr[i] = listToCopy.arr[i];
-        }
     }
     return *this;
 }
 
 template <typename T>
 void ArrayList<T>::append(const T& x){
+    T value = x; // copy first, x may refer to an element of arr that gets deleted on resize
     if (size == capacity){ // allocate 2x or if capacity is 0 start at 1
         int newCapacity = (capacity == 0) ? 1 : capacity * 2;
         T* temp = new T[newCapacity];
@@ -53,16 +56,15 @@ void ArrayList<T>::append(const T& x){
         arr = temp;
         capacity = newCapacity;
     }
-    arr[size++] = x; // post incriment does the assignment operation first then incriments
+    arr[size++] = value; // post incriment does the assignment operation first then incriments
 }
 
 template <typename T>
-bool ArrayList<T>::insert(int index, const T& x){
-
+void ArrayList<T>::insert(int index, const T& x){
     if(index < 0 || index > size){
-        std::cout<<"Index Out of Range";
-        return false;
+        throw std::out_of_range("insert: index out of range");
     }
+    T value = x; // copy first, x may refer to an element of arr that gets deleted on resize or overwritten by the shift
     if(size == capacity){ // reallocate bigger size
         capacity = (capacity == 0) ? 1 : capacity * 2;
         T* temp = new T[capacity];
@@ -76,24 +78,20 @@ bool ArrayList<T>::insert(int index, const T& x){
     for(int i = size; i > index; i--){
         arr[i] = arr[i-1];
     }
-    arr[index] = x;
+    arr[index] = value;
     size++;
-    return true;
-    
 }
 
 template <typename T>
 void ArrayList<T>::deleteAt(int index){
     //can only delete valid index, if size is 5, deleting at 5 is not valid because array are index 0, so element 5 is at index 4
-    if(index>=0 && index<size){
-        for(int i = index; i < size-1; i++){
-            arr[i] = arr[i+1];
-        }
-        size--;
+    if(index < 0 || index >= size){
+        throw std::out_of_range("deleteAt: index out of range");
     }
-    else{
-        std::cout<<"Cannot delete, invalid index\n";
+    for(int i = index; i < size-1; i++){
+        arr[i] = arr[i+1];
     }
+    size--;
 }
 
 template <typename T>
@@ -131,19 +129,23 @@ bool ArrayList<T>::operator!=(const ArrayList& rhs) const{
 }
 
 template <typename T>
-bool ArrayList<T>::get(int index, T& out) const{
-    if(index >= 0 && index < size){
-      out = arr[index];
-      return true;
+const T& ArrayList<T>::get(int index) const{
+    if(index < 0 || index >= size){
+        throw std::out_of_range("get: index out of range");
     }
-    else{
-        std::cout<<"Cannot get out of range\n";
-        return false;
-    }
+    return arr[index];
 }
 
 template <typename T>
-void ArrayList<T>::display(){
+T& ArrayList<T>::get(int index){
+    if(index < 0 || index >= size){
+        throw std::out_of_range("get: index out of range");
+    }
+    return arr[index];
+}
+
+template <typename T>
+void ArrayList<T>::display() const{
     for(int i = 0; i<size; i++){
         std::cout<<arr[i]<<" ";
     }
@@ -187,7 +189,7 @@ int ArrayList<T>::binSearch(const T& key, int low, int high) const{
     int mid = (low + high) / 2;
     if(arr[mid] == key) return mid;
     else if(key < arr[mid]) return binSearch(key, low, mid-1);
-    else if(key > arr[mid]) return binSearch(key, mid+1, high);
+    else return binSearch(key, mid+1, high); // key > arr[mid]
 }
 
 //iterative version

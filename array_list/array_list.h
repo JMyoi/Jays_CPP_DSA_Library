@@ -1,5 +1,4 @@
 #pragma once
-//TODO exception handle
 
 template <typename T>
 class ArrayList{
@@ -11,14 +10,15 @@ public:
     
     
     void append(const T& x); // add to end of list
-    bool insert(int index, const T& x); // add x at index 
-    void deleteAt(int index); // delete element at index
+    void insert(int index, const T& x); // add x at index, throws out_of_range if index < 0 or index > size
+    void deleteAt(int index); // delete element at index, throws out_of_range if index is invalid
     bool remove(const T& element);// remove first occurance of element
     bool operator== (const ArrayList& rhs) const;
     bool operator!=(const ArrayList& rhs) const;
 
-    bool get(int index, T& out) const; // return element at index
-    void display();
+    const T& get(int index) const; // return element at index, throws out_of_range if index is invalid
+    T& get(int index); // non-const version so elements can be modified
+    void display() const;
     int getSize() const; // size of List
     int getCapacity() const;
 
