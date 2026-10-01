@@ -21,7 +21,8 @@ public:
     void display() const;
     int getSize() const; // size of List
     int getCapacity() const;
-
+    
+    void insertionSort();
     void bubbleSort(); 
     int linearSearch(const T& key) const; // search for element x and return the index.
     int binarySearch(const T& key, bool recVer = true) const; // toggle version iterative or recursive version, reccursive by default

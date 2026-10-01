@@ -161,6 +161,22 @@ template <typename T>
 int ArrayList<T>::getCapacity() const{
     return capacity;
 }
+template <typename T>
+void ArrayList<T>::insertionSort(){
+
+    for(int i = 1; i < size; i++){
+        int j = i-1;
+        T key = arr[i];
+        while(j > -1 && key < arr[j]){
+            arr[j+1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+
+
+
+}
 
 template <typename T>
 void ArrayList<T>::bubbleSort(){
