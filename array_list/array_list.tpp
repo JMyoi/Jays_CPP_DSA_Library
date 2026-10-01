@@ -163,6 +163,25 @@ int ArrayList<T>::getCapacity() const{
 }
 
 template <typename T>
+void ArrayList<T>::bubbleSort(){
+    bool swapMade = false;
+
+    for(int i = 0; i < size - 1; i++){
+        swapMade = false;
+        for(int j = 0; j < size - 1 - i; j++){
+            if(arr[j] > arr[j + 1]){
+                //Swap j and j-1
+                T temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+                swapMade = true;
+            }
+        }
+        if(!swapMade) return;
+    }
+}
+
+template <typename T>
 int ArrayList<T>::linearSearch(const T& key) const{
     for(int i  = 0; i < size; i++){
         if(arr[i] == key){
