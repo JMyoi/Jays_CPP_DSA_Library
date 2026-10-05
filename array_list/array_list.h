@@ -24,6 +24,7 @@ public:
     
     void insertionSort();
     void bubbleSort(); 
+    void selectionSort();
     int linearSearch(const T& key) const; // search for element x and return the index.
     int binarySearch(const T& key, bool recVer = true) const; // toggle version iterative or recursive version, reccursive by default
 

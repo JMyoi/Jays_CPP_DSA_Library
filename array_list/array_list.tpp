@@ -174,8 +174,6 @@ void ArrayList<T>::insertionSort(){
         arr[j + 1] = key;
     }
 
-
-
 }
 
 template <typename T>
@@ -194,6 +192,23 @@ void ArrayList<T>::bubbleSort(){
             }
         }
         if(!swapMade) return;
+    }
+}
+template <typename T>
+void ArrayList<T>::selectionSort(){
+    for(int i = 0; i < size - 1; ++i){
+        int smallest = i; // keeps track of smallest elements index
+        for(int j = i+1; j < size; ++j){
+            if(arr[j] < arr[smallest]){
+                smallest = j;
+            }
+        }
+        //swap only if we found a smaller element
+        if(smallest != i){
+            T temp = arr[i];
+            arr[i] = arr[smallest];
+            arr[smallest] = temp;
+        }
     }
 }
 
