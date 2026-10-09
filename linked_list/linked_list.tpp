@@ -31,8 +31,8 @@ LinkedList<T>::LinkedList(const LinkedList& origList){
         head = new Node<T>;
         head->data = p->data;
         head->next = nullptr;// in case there is only one element in the linked list.
-        Node<T>* curr = head; // keeps track of current new node created;
         Node<T>* prev = head; // keeps track of the previously created node to link to curr
+        Node<T>* curr = head; // keeps track of current new node created;
         p = p->next;
 
         while(p!=nullptr){
@@ -41,7 +41,6 @@ LinkedList<T>::LinkedList(const LinkedList& origList){
             prev = curr;
             p = p->next;
         }
-        curr->next = nullptr; // set last element to point to null
     }
 }
 
@@ -73,18 +72,14 @@ LinkedList<T>& LinkedList<T>::operator=(const LinkedList& listToCopy){
                 prev = curr;
                 p = p->next;
             }
-            curr->next = nullptr;
         }
     }
     return *this;
-
 }
 
 template <typename T>
 void LinkedList<T>::insertFront(const T& data){
-    Node<T>* newNode = new Node<T>;
-    newNode->data = data;
-    newNode->next = nullptr;
+    Node<T>* newNode = new Node<T>{data, nullptr};
     if(head == nullptr){ // no items then just make head point to new node
         head = newNode;
     }else{
@@ -94,7 +89,6 @@ void LinkedList<T>::insertFront(const T& data){
     length++;
 }
 
-/*TODO: account for inserting at one past the last node, length = 5, insert at 6.*/
 template <typename T>
 bool LinkedList<T>::insertAt(int index, const T& data){
     // out of range
@@ -103,9 +97,8 @@ bool LinkedList<T>::insertAt(int index, const T& data){
         return false;
     }
     //create new node
-    Node<T>* temp = new Node<T>;
-    temp->data = data;
-    temp->next = nullptr;
+    Node<T>* temp = new Node<T>{data, nullptr};   // replaces the 3 lines
+
     // front of the list index = 0
     if(index == 0){
         temp->next = head;
@@ -280,13 +273,16 @@ void LinkedList<T>::reverseRec(){
     Node<T>* curr = head; 
     revRec(prev, curr);
 }
+
 template <typename T>
 void LinkedList<T>::concat(const LinkedList<T>& L){
     // Create a deep copy of L, then append it to this list.
+    /*Why copy instead of linking L's nodes directly? Both lists would end up sharing those nodes. When both destructors ran, the shared nodes would be deleted twice and the program could crash. Copying gives each list its own nodes.*/
     Node<T>* nodeTracker = L.head;// keeps track of list to copys nodes as we make copy of each
     Node<T>* first = nullptr;//points to first node of the copy list.
     Node<T>* prev = nullptr;// keeps track of tail of newly created list
     Node<T>* curr = nullptr;//tracks newly created nodes
+    //build a separate copy of L
     while(nodeTracker != nullptr){
         curr = new Node<T>{nodeTracker->data, nullptr};
         if(first == nullptr){
@@ -299,14 +295,14 @@ void LinkedList<T>::concat(const LinkedList<T>& L){
         nodeTracker = nodeTracker->next;
     }
 
-    // Nothing to append.
+    // Nothing to append, meaning L was empty then return early
     if(first == nullptr){
         return;
     }
-
+    //If this list is empty, the copy becomes the whole list: head = first.
     if(head == nullptr){
         head = first;
-    }
+    }//Otherwise, it walks to the last node (tail) and sets tail->next = first.
     else{
         Node<T>* tail = head;
         while(tail->next != nullptr){

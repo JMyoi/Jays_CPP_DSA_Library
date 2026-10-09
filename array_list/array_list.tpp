@@ -173,7 +173,6 @@ void ArrayList<T>::insertionSort(){
         }
         arr[j + 1] = key;
     }
-
 }
 
 template <typename T>
@@ -204,7 +203,7 @@ void ArrayList<T>::selectionSort(){
             }
         }
         //swap only if we found a smaller element
-        if(smallest != i){
+        // if(smallest != i){
             T temp = arr[i];
             arr[i] = arr[smallest];
             arr[smallest] = temp;

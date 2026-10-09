@@ -14,6 +14,7 @@ class LinkedList{
         ~LinkedList();
         LinkedList(const LinkedList& origList);
         LinkedList& operator=(const LinkedList& listToCopy);
+        
         void insertFront(const T& data); 
         void push_back(const T& data);
         bool insertAt(int index, const T& data);
@@ -41,4 +42,3 @@ class LinkedList{
 };
 
 #include "linked_list.tpp"
-
