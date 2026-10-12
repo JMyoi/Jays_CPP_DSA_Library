@@ -30,6 +30,7 @@ class LinkedList{
         void reverseRec();
         void concat(const LinkedList<T>& L);
         void merge(LinkedList<T>& other); // merge two sorted linked lists, this and other
+        bool hasCycle();
         T sum();
         T max();
 

@@ -392,9 +392,19 @@ void LinkedList<T>::merge(LinkedList<T>& other){
     other.head = nullptr;
     length +=other.length;
     other.length = 0;
-
 }
 
+template <typename T>
+bool LinkedList<T>::hasCycle(){
+    Node* fast = head;
+    Node* slow = head;
+    while(fast && fast->next){
+        slow = slow.next;
+        fast = fast.next.next;
+        if(fast == slow) return true;
+    }
+    return false;
+}
 
 //helper funcitons
 template <typename T>
