@@ -324,6 +324,76 @@ void LinkedList<T>::concat(const LinkedList<T>& L){
 
     length += L.length;
 }
+/*
+merges two sorted linked list, this and other, 
+it will change links of ther linked lists 
+so at the end other will have head = null and lenght of 0
+O(n + m)
+where n is the lenght of this list and m is the lenght of the other list
+
+we must pass the other linked list as reference 
+With pass-by-value, the copy constructor would deep-copy the list. 
+The caller's original list would then never be emptied, and this == &other could never be true.
+*/
+template <typename T>
+void LinkedList<T>::merge(LinkedList<T>& other){
+    if(this == &other) return; // avoid merging list with itself
+    // we need 2 node pointers
+    //newhead keeps track of the head of the newly merged list and will be either this head or others head
+    //tail will keep track of the end of the newly merged linked list to track where to add new elements.
+    Node<T>* newhead = nullptr;
+    Node<T>* tail = nullptr;
+    if(head == nullptr){
+        head = other.head;
+        other.head = nullptr;
+        length+=other.length;
+        other.length = 0; 
+        return;
+    } else if(other.head == nullptr){
+        return;
+    }
+    
+    if(head->data <=other.head->data){
+        newhead = head;
+        tail = head;
+        head = head->next;
+        tail->next = nullptr;
+    }
+    else{
+        newhead = other.head;
+        tail = other.head;
+        other.head = other.head->next;
+        tail->next = nullptr;
+    }
+
+    while(head and other.head){
+        if(head->data <= other.head->data){
+            tail->next = head;
+            tail = tail->next;
+            head = head->next;
+            tail->next = nullptr;
+        }
+        else{
+            tail->next = other.head;
+            tail = tail->next;
+            other.head = other.head->next;
+            tail->next = nullptr;
+        }
+    }
+    if(head != nullptr){
+        tail->next = head;
+    }
+    else if(other.head != nullptr){
+        tail->next = other.head;
+    }
+    head = newhead;
+    
+    //in case the case that others head is still pointing to a list
+    other.head = nullptr;
+    length +=other.length;
+    other.length = 0;
+
+}
 
 
 //helper funcitons

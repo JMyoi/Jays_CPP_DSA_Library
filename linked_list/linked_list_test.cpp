@@ -336,5 +336,38 @@ void LinkedListTest(){
     cout << "C5 length should be 4: " << C5.getLength() << endl;
     cout << endl;
 
+    // Test 18: Merge Two Sorted Lists
+    cout << "--- Test 18: Merge Sorted ---" << endl;
+    auto mergeCase = [](const string& name, initializer_list<int> a, initializer_list<int> b,
+                        const string& expected, int expectedLen){
+        LinkedList<int> A;
+        LinkedList<int> B;
+        for(int x : a) A.push_back(x);
+        for(int x : b) B.push_back(x);
+        A.merge(B);
+        cout << name << " should be " << expected << ": ";
+        A.print();
+        cout << "  merged length should be " << expectedLen << ": " << A.getLength() << endl;
+        cout << "  other length should be 0: " << B.getLength() << endl;
+    };
+    mergeCase("Both empty", {}, {}, "(empty)", 0);
+    mergeCase("This empty", {}, {1, 2, 3}, "1 2 3", 3);
+    mergeCase("Other empty", {1, 2, 3}, {}, "1 2 3", 3);
+    mergeCase("Interleaved", {1, 3, 5}, {2, 4, 6}, "1 2 3 4 5 6", 6);
+    mergeCase("This entirely first", {1, 2}, {5, 6}, "1 2 5 6", 4);
+    mergeCase("Other entirely first", {5, 6}, {1, 2}, "1 2 5 6", 4);
+    mergeCase("Duplicates across lists", {1, 2, 2, 4}, {2, 3, 4}, "1 2 2 2 3 4 4", 7);
+    mergeCase("Uneven lengths", {1}, {0, 2, 3, 9}, "0 1 2 3 9", 5);
+
+    LinkedList<int> M1;
+    M1.push_back(1);
+    M1.push_back(2);
+    M1.push_back(3);
+    M1.merge(M1);
+    cout << "Self merge should be unchanged 1 2 3: ";
+    M1.print();
+    cout << "  length should still be 3: " << M1.getLength() << endl;
+    cout << endl;
+
     cout << "=== ALL TESTS COMPLETE ===" << endl;
 }
