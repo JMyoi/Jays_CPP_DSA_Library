@@ -25,9 +25,9 @@ class LinkedList{
         void print();
         //other 
         int getLength();
+        void printRec();
         void reverse();
         void reverseRec();
-        void printRec();
         void concat(const LinkedList<T>& L);
         T sum();
         T max();

@@ -250,7 +250,18 @@ T LinkedList<T>::max(){
     }
     return M;
 }
-
+/*
+an easier way to see it 
+Node* prev = nullptr;
+Node* curr = nullptr;
+while (head) {
+    prev = curr;
+    curr = head;
+    head = head->next;
+    curr->next = prev;
+}
+head = curr;
+*/
 template <typename T>
 void LinkedList<T>::reverse(){
     //reverse in-place using 3 sliding pointers
