@@ -17,9 +17,9 @@ class LinkedList{
         
         void insertFront(const T& data); 
         void push_back(const T& data);
-        bool insertAt(int index, const T& data);
-        T deleteAt(int index);
-        T at(int index);
+        void insertAt(int index, const T& data); // throws out_of_range if index < 0 or index > length
+        T deleteAt(int index); // throws out_of_range if index is invalid
+        T at(int index); // throws out_of_range if index is invalid
         void clear();
         int find(const T& key);
         void print();
@@ -32,7 +32,7 @@ class LinkedList{
         void merge(LinkedList<T>& other); // merge two sorted linked lists, this and other
         bool hasCycle();
         T sum();
-        T max();
+        T max(); // throws out_of_range if list is empty
 
     private:
         Node<T>* head;

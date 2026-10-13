@@ -15,9 +15,19 @@ void LinkedListTest(){
     cout << "getLength() should be 0: " << L1.getLength() << endl;
     cout << "print() should show nothing: ";
     L1.print();
-    cout << "Attempting at(0): " << L1.at(0) << endl;
+    try {
+        cout << "Attempting at(0): " << L1.at(0) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
     cout << "Attempting find(5): " << L1.find(5) << endl;
-    cout << "Attempting deleteAt(0): " << L1.deleteAt(0) << endl;
+    try {
+        cout << "Attempting deleteAt(0): " << L1.deleteAt(0) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
     cout << endl;
 
     // Test 2: Insert Front - Single Element
@@ -47,8 +57,18 @@ void LinkedListTest(){
     cout << "at(1) should be 30: " << L1.at(1) << endl;
     cout << "at(2) should be 20: " << L1.at(2) << endl;
     cout << "at(3) should be 10: " << L1.at(3) << endl;
-    cout << "at(4) out of range: " << L1.at(4) << endl;
-    cout << "at(-1) out of range: " << L1.at(-1) << endl;
+    try {
+        cout << "at(4) out of range: " << L1.at(4) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
+    try {
+        cout << "at(-1) out of range: " << L1.at(-1) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
     cout << endl;
 
     // Test 5: Find Elements
@@ -74,7 +94,15 @@ void LinkedListTest(){
     L2.insertAt(1, 150);  // Insert in middle
     cout << "Inserted 150 at index 1 (should be 200, 150, 100, 300): ";
     L2.print();
-    L2.insertAt(10, 999); // Out of range
+    try {
+        L2.insertAt(10, 999); // Out of range
+        cout << "insertAt(10, 999) unexpectedly succeeded" << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "insertAt(10, 999) threw as expected: " << e.what() << endl;
+    }
+    cout << "List should be unchanged (200, 150, 100, 300): ";
+    L2.print();
     cout << endl;
 
     // Test 7: Delete At Index
@@ -111,7 +139,12 @@ void LinkedListTest(){
     cout << "List should be empty: ";
     L3.print();
     cout << "getLength() should be 0: " << L3.getLength() << endl;
-    cout << "Attempting deleteAt(0) on empty: " << L3.deleteAt(0) << endl;
+    try {
+        cout << "Attempting deleteAt(0) on empty: " << L3.deleteAt(0) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
     cout << endl;
 
     // Test 9: Recursive Print
@@ -176,9 +209,19 @@ void LinkedListTest(){
     cout << "List after delete (empty): ";
     L7.print();
     cout << "Attempting operations on empty list:" << endl;
-    cout << "  at(0): " << L7.at(0) << endl;
+    try {
+        cout << "  at(0): " << L7.at(0) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
     cout << "  find(42): " << L7.find(42) << endl;
-    cout << "  deleteAt(0): " << L7.deleteAt(0) << endl;
+    try {
+        cout << "  deleteAt(0): " << L7.deleteAt(0) << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
     cout << endl;
 
     // Test 13: Rule of Three (Copy Ctor, Copy Assignment, Destructor Safety)
@@ -239,7 +282,12 @@ void LinkedListTest(){
     cout << "--- Test 14: Sum and Max ---" << endl;
     LinkedList<int> L8;
     cout << "Empty list sum() should be 0: " << L8.sum() << endl;
-    cout << "Empty list max() should be 0: " << L8.max() << endl;
+    try {
+        cout << "Empty list max(): " << L8.max() << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "threw as expected: " << e.what() << endl;
+    }
     L8.push_back(15);
     L8.push_back(5);
     L8.push_back(25);

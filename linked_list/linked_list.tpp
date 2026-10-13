@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <stdexcept>
 
 //constructor
 template <typename T>
@@ -90,11 +91,10 @@ void LinkedList<T>::insertFront(const T& data){
 }
 
 template <typename T>
-bool LinkedList<T>::insertAt(int index, const T& data){
+void LinkedList<T>::insertAt(int index, const T& data){
     // out of range
     if (index<0 || index>length){
-        std::cout<<"trying to insert out of range\n";
-        return false;
+        throw std::out_of_range("insertAt: index out of range");
     }
     //create new node
     Node<T>* temp = new Node<T>{data, nullptr};   // replaces the 3 lines
@@ -104,7 +104,7 @@ bool LinkedList<T>::insertAt(int index, const T& data){
         temp->next = head;
         head = temp;
         length++;
-        return true;
+        return;
     }
     // insert at a given position, not first index.
     Node<T>* p = head;
@@ -114,7 +114,6 @@ bool LinkedList<T>::insertAt(int index, const T& data){
     temp->next = p->next;
     p->next = temp;
     length++;
-    return true;
 }
 
 template <typename T>
@@ -136,8 +135,7 @@ void LinkedList<T>::push_back(const T& data){
 template <typename T>
 T LinkedList<T>::deleteAt(int index){
     if(index<0 || index>=length){
-        std::cout<<"Trying to delete out of range\n";
-        return T{};
+        throw std::out_of_range("deleteAt: index out of range");
     }
     //first element
     if(index == 0){
@@ -177,8 +175,7 @@ void LinkedList<T>::clear(){
 template <typename T>
 T LinkedList<T>::at(int index){
     if(index<0 || index>=length){
-        std::cout<<"out of range access\n";
-        return T{};
+        throw std::out_of_range("at: index out of range");
     }
 
     Node<T>* temp = head;
@@ -239,8 +236,8 @@ T LinkedList<T>::sum(){
 template <typename T>
 T LinkedList<T>::max(){
     if(head == nullptr)
-        return T{};
-    
+        throw std::out_of_range("max: list is empty");
+
     T M = head->data;
     Node<T>* p = head->next;
     while(p != nullptr){
@@ -396,11 +393,11 @@ void LinkedList<T>::merge(LinkedList<T>& other){
 
 template <typename T>
 bool LinkedList<T>::hasCycle(){
-    Node* fast = head;
-    Node* slow = head;
+    Node<T>* fast = head;
+    Node<T>* slow = head;
     while(fast && fast->next){
-        slow = slow.next;
-        fast = fast.next.next;
+        slow = slow->next;
+        fast = fast->next->next;
         if(fast == slow) return true;
     }
     return false;
