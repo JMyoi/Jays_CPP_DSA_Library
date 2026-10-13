@@ -21,7 +21,6 @@ bool HashMapChaining<T>::insert(int key, const T& value){
     int hashIndex = ComputeHash(key);
     for(int i = 0; i<HashTable.at(hashIndex).getLength(); i++){
         if(HashTable.at(hashIndex).at(i).key == key){
-            cout<<" Key: "<<key<<" already there"<<endl;
             return false;
         }
     }
@@ -37,18 +36,15 @@ template <typename T>
 bool HashMapChaining<T>::get(int key, T& out){
     //compute hash value index
     int index = ComputeHash(key);
-    if(HashTable.at(index).getLength() == 0){
-        cout<<"Key Not found!"<<endl;
-        return false;
-    } 
-     //traverse linked list at that hash value index until we found the key
+
+    //traverse linked list at that hash value index until we found the key
     for(int i = 0; i < HashTable.at(index).getLength(); i++){
-        if(HashTable.at(index).at(i).key == key){
-            out =  HashTable.at(index).at(i).value;
+        KVpair<T> pair = HashTable.at(index).at(i);
+        if(pair.key == key){
+            out =  pair.value;
             return true;
         }
     }
-    cout<<"Key Not found!"<<endl;
     return false;
 }
 
@@ -61,23 +57,19 @@ void HashMapChaining<T>::clear(){
 }
 
 template <typename T>
-void HashMapChaining<T>::remove(int key){
+bool HashMapChaining<T>::remove(int key){
     //compute hash value index
     int index = ComputeHash(key);
-    if(HashTable.at(index).getLength() == 0){
-        cout<<"Key Not found!"<<endl;
-        return;
-    } 
-     //traverse linked list at that hash value index until we found the key
+
+    //traverse linked list at that hash value index until we found the key
     for(int i = 0; i < HashTable.at(index).getLength(); i++){
         if(HashTable.at(index).at(i).key == key){
             HashTable.at(index).deleteAt(i);
             size--;
-            return;
+            return true;
         }
     }
-    cout<<"Key Not found!"<<endl;
-
+    return false;
 }
 
 
@@ -85,14 +77,9 @@ template <typename T>
 void HashMapChaining<T>::print(){
     for(int i = 0; i<capacity; i++){
         cout<<i<<" ";
-        if(HashTable.at(i).getLength() == 0){
-            cout<<endl;
-            continue;  
-        } 
         for(int j = 0; j < HashTable.at(i).getLength(); j++){
-            int Key = HashTable.at(i).at(j).key;
-            T Value = HashTable.at(i).at(j).value;
-            cout<<"-->"<<"("<<Key<<", "<<Value<<")";
+            KVpair<T> pair = HashTable.at(i).at(j);
+            cout<<"-->"<<"("<<pair.key<<", "<<pair.value<<")";
         }
         cout<<endl;
     }
@@ -123,13 +110,10 @@ void HashMapChaining<T>::rehash(){
     //insert all keys from old table to new one
     size = 0;// start back at 0 and insert will incriment to appropriate size, or else it may rehash due to having the old size value
     for(size_t i = 0; i < oldTable.size(); i++){
-        //check if that indexs linked list is empty, if it is then continue to next index
-        if(oldTable.at(i).getLength() == 0) continue;
         //for every node in that linked list, we will reinsert it into the new table
         for(int j = 0; j< oldTable.at(i).getLength(); j++){
-            int Key = oldTable.at(i).at(j).key;
-            T Value = oldTable.at(i).at(j).value;
-            insert(Key, Value);
+            KVpair<T> pair = oldTable.at(i).at(j);
+            insert(pair.key, pair.value);
         }
     }
 }
